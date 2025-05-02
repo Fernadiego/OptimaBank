@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OptimaBank.Abstractions\OptimaBank.Abstractions.csproj" />
+    <ProjectReference Include="..\OptimaBank.Domain\OptimaBank.Domain.csproj" />
+    <ProjectReference Include="..\OptimaBank.Services\OptimaBank.Services.csproj" />
+  </ItemGroup>
+
+</Project>

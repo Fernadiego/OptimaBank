@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <StartupObject></StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="8.0.4" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OptimaBank.Abstractions\OptimaBank.Abstractions.csproj" />
+    <ProjectReference Include="..\OptimaBank.Application\OptimaBank.ApplicationLogic.csproj" />
+    <ProjectReference Include="..\OptimaBank.Domain\OptimaBank.Domain.csproj" />
+    <ProjectReference Include="..\OptimaBank.Repository\OptimaBank.Repository.csproj" />
+    <ProjectReference Include="..\OptimaBank.Services\OptimaBank.Services.csproj" />
+    <ProjectReference Include="..\OptimaBank.SQLServerDataProvider\OptimaBank.SQLServerDataProvider.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ResourcesFile.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourcesFile.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="ResourcesFile.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesFile.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

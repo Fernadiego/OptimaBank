@@ -1,0 +1,64 @@
+# Archivos y carpetas de Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+bin/
+obj/
+
+# Archivos temporales y de depuración
+*.pdb
+*.cache
+*.log
+*.ilk
+*.aps
+*.ncb
+*.opendb
+*.sdf
+*.db
+*.exe
+*.dll
+
+# Archivos de configuración del IDE
+*.vsconfig
+*.VC.db
+*.VC.opendb
+
+# Archivos generados por el compilador
+*.csproj.user
+*.msbuild.binlog
+*.appxupload
+
+# Configuración local
+.env
+.localhistory/
+
+# Paquetes NuGet descargados
+packages/
+*.nupkg
+project.lock.json
+global.json
+
+# Archivos generados por dotnet
+dotnet-tools.json
+.dotnet/
+
+# Carpetas de configuración y caché
+.vscode/
+.idea/
+node_modules/
+npm-debug.log
+yarn.lock
+
+# Publicaciones y distribuciones
+publish/
+dist/
+
+# Archivos de Mac OS
+.DS_Store
+
+# Archivos de Linux
+*.swp
