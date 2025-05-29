@@ -2,6 +2,7 @@ using OptimaBank.Abstractions;
 using OptimaBank.ApplicationLogic;
 using OptimaBank.Domain;
 using OptimaBank.Services;
+using System.Windows.Forms;
 
 namespace OptimaBank
 {
@@ -46,6 +47,8 @@ namespace OptimaBank
         {
             FrmLogin login = new FrmLogin(_login, _encriptarAppService);
             login.MdiParent = this;
+            login.StartPosition = FormStartPosition.Manual;
+            login.Location = new Point((Screen.PrimaryScreen.Bounds.Width - login.Width) / 2, 100);
             login.Show();
         }
 
@@ -81,11 +84,12 @@ namespace OptimaBank
 
         #region Propiedades
 
+        private ToolStripLabel lblUsuario;
         private void InicializarMenu()
         {
-            sesionToolStripMenuItem.Text = ResourcesFile.MenuSession;
-            iniciarToolStripMenuItem.Text = ResourcesFile.MenuInit;
-            cerrarToolStripMenuItem.Text = ResourcesFile.MenuClose;
+            sesionToolStripMenuItem.Text = "Sesión"; //ResourcesFile.MenuSession;
+            iniciarToolStripMenuItem.Text = "Iniciar"; //ResourcesFile.MenuInit;
+            cerrarToolStripMenuItem.Text = "Cerrar"; //ResourcesFile.MenuClose;
         }
 
         public void CargarMenuSegunPermisos()

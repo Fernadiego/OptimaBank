@@ -36,8 +36,8 @@
             lblPass = new Label();
             BtnCancelar = new Button();
             panel1 = new Panel();
-            linkLabel2 = new LinkLabel();
-            linkLabel1 = new LinkLabel();
+            button2 = new Button();
+            button1 = new Button();
             pictureBox1 = new PictureBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -45,109 +45,119 @@
             // 
             // btnAceptar
             // 
-            btnAceptar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAceptar.ForeColor = SystemColors.ButtonShadow;
-            btnAceptar.Location = new Point(215, 123);
+            btnAceptar.BackColor = Color.RoyalBlue;
+            btnAceptar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnAceptar.ForeColor = Color.White;
+            btnAceptar.Location = new Point(223, 121);
+            btnAceptar.Margin = new Padding(3, 2, 3, 2);
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(129, 40);
             btnAceptar.TabIndex = 0;
             btnAceptar.Text = "Aceptar";
-            btnAceptar.UseVisualStyleBackColor = true;
+            btnAceptar.UseVisualStyleBackColor = false;
             btnAceptar.Click += btnAceptar_Click;
             // 
             // lblUser
             // 
             lblUser.AutoSize = true;
-            lblUser.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lblUser.ForeColor = SystemColors.ButtonShadow;
-            lblUser.Location = new Point(206, 24);
+            lblUser.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblUser.ForeColor = SystemColors.ActiveCaptionText;
+            lblUser.Location = new Point(212, 30);
             lblUser.Name = "lblUser";
-            lblUser.Size = new Size(67, 21);
+            lblUser.Size = new Size(82, 25);
             lblUser.TabIndex = 1;
             lblUser.Text = "Usuario:";
             // 
             // txtUsuario
             // 
-            txtUsuario.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtUsuario.Font = new Font("Segoe UI", 12F);
             txtUsuario.ForeColor = SystemColors.ButtonShadow;
-            txtUsuario.Location = new Point(290, 23);
+            txtUsuario.Location = new Point(315, 29);
+            txtUsuario.Margin = new Padding(3, 2, 3, 2);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(201, 29);
+            txtUsuario.Size = new Size(183, 29);
             txtUsuario.TabIndex = 2;
             // 
             // txtPassword
             // 
-            txtPassword.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            txtPassword.Font = new Font("Segoe UI", 12F);
             txtPassword.ForeColor = SystemColors.ButtonShadow;
-            txtPassword.Location = new Point(290, 68);
+            txtPassword.Location = new Point(315, 66);
+            txtPassword.Margin = new Padding(3, 2, 3, 2);
             txtPassword.Name = "txtPassword";
             txtPassword.PasswordChar = '*';
-            txtPassword.Size = new Size(201, 29);
+            txtPassword.Size = new Size(183, 29);
             txtPassword.TabIndex = 3;
             // 
             // lblPass
             // 
             lblPass.AutoSize = true;
-            lblPass.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lblPass.ForeColor = SystemColors.ButtonShadow;
-            lblPass.Location = new Point(205, 70);
+            lblPass.Font = new Font("Segoe UI", 13F, FontStyle.Bold);
+            lblPass.ForeColor = SystemColors.ActiveCaptionText;
+            lblPass.Location = new Point(212, 68);
             lblPass.Name = "lblPass";
-            lblPass.Size = new Size(79, 21);
+            lblPass.Size = new Size(97, 25);
             lblPass.TabIndex = 4;
             lblPass.Text = "Password:";
             // 
             // BtnCancelar
             // 
-            BtnCancelar.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            BtnCancelar.ForeColor = SystemColors.ButtonShadow;
-            BtnCancelar.Location = new Point(362, 123);
+            BtnCancelar.BackColor = Color.RoyalBlue;
+            BtnCancelar.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            BtnCancelar.ForeColor = Color.White;
+            BtnCancelar.Location = new Point(370, 121);
+            BtnCancelar.Margin = new Padding(3, 2, 3, 2);
             BtnCancelar.Name = "BtnCancelar";
             BtnCancelar.Size = new Size(129, 40);
             BtnCancelar.TabIndex = 5;
             BtnCancelar.Text = "Cancelar";
-            BtnCancelar.UseVisualStyleBackColor = true;
+            BtnCancelar.UseVisualStyleBackColor = false;
             BtnCancelar.Click += BtnCancelar_Click;
             // 
             // panel1
             // 
-            panel1.BackColor = SystemColors.ActiveCaption;
-            panel1.Controls.Add(linkLabel2);
-            panel1.Controls.Add(linkLabel1);
+            panel1.BackColor = Color.RoyalBlue;
+            panel1.Controls.Add(button2);
+            panel1.Controls.Add(button1);
             panel1.Controls.Add(pictureBox1);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
+            panel1.Margin = new Padding(3, 2, 3, 2);
             panel1.Name = "panel1";
-            panel1.Size = new Size(183, 182);
+            panel1.Size = new Size(195, 182);
             panel1.TabIndex = 6;
             // 
-            // linkLabel2
+            // button2
             // 
-            linkLabel2.AutoSize = true;
-            linkLabel2.Font = new Font("Segoe UI", 7F, FontStyle.Regular, GraphicsUnit.Point);
-            linkLabel2.Location = new Point(3, 148);
-            linkLabel2.Name = "linkLabel2";
-            linkLabel2.Size = new Size(70, 12);
-            linkLabel2.TabIndex = 2;
-            linkLabel2.TabStop = true;
-            linkLabel2.Text = "Nuevo Usuario";
+            button2.BackColor = Color.LightGray;
+            button2.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
+            button2.Location = new Point(99, 152);
+            button2.Margin = new Padding(3, 2, 3, 2);
+            button2.Name = "button2";
+            button2.Size = new Size(90, 22);
+            button2.TabIndex = 8;
+            button2.Text = "Olvidé Password";
+            button2.UseVisualStyleBackColor = false;
             // 
-            // linkLabel1
+            // button1
             // 
-            linkLabel1.AutoSize = true;
-            linkLabel1.Font = new Font("Segoe UI", 7F, FontStyle.Regular, GraphicsUnit.Point);
-            linkLabel1.Location = new Point(87, 148);
-            linkLabel1.Name = "linkLabel1";
-            linkLabel1.Size = new Size(93, 12);
-            linkLabel1.TabIndex = 1;
-            linkLabel1.TabStop = true;
-            linkLabel1.Text = "Cambiar Contraseña";
+            button1.BackColor = Color.LightGray;
+            button1.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
+            button1.Location = new Point(4, 152);
+            button1.Margin = new Padding(3, 2, 3, 2);
+            button1.Name = "button1";
+            button1.Size = new Size(90, 22);
+            button1.TabIndex = 7;
+            button1.Text = "Registrarse";
+            button1.UseVisualStyleBackColor = false;
             // 
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(34, 37);
+            pictureBox1.Location = new Point(31, 22);
+            pictureBox1.Margin = new Padding(3, 2, 3, 2);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(111, 102);
+            pictureBox1.Size = new Size(130, 116);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -168,15 +178,15 @@
             Controls.Add(btnAceptar);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(3, 2, 3, 2);
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FrmLogin";
             Opacity = 0.5D;
             StartPosition = FormStartPosition.CenterScreen;
-            Text = "Login";
+            Text = "Login Optima Bank";
             Load += FrmLogin_Load;
             panel1.ResumeLayout(false);
-            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -192,7 +202,7 @@
         private Button BtnCancelar;
         private Panel panel1;
         private PictureBox pictureBox1;
-        private LinkLabel linkLabel1;
-        private LinkLabel linkLabel2;
+        private Button button2;
+        private Button button1;
     }
 }

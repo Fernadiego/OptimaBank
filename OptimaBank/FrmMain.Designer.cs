@@ -65,14 +65,14 @@ namespace OptimaBank
             // iniciarToolStripMenuItem
             // 
             iniciarToolStripMenuItem.Name = "iniciarToolStripMenuItem";
-            iniciarToolStripMenuItem.Size = new Size(180, 22);
+            iniciarToolStripMenuItem.Size = new Size(106, 22);
             iniciarToolStripMenuItem.Text = "Iniciar";
             iniciarToolStripMenuItem.Click += iniciarToolStripMenuItem_Click;
             // 
             // cerrarToolStripMenuItem
             // 
             cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
-            cerrarToolStripMenuItem.Size = new Size(180, 22);
+            cerrarToolStripMenuItem.Size = new Size(106, 22);
             cerrarToolStripMenuItem.Text = "Cerrar";
             cerrarToolStripMenuItem.Click += cerrarToolStripMenuItem_Click;
             // 

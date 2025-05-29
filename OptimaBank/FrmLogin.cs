@@ -18,8 +18,8 @@ namespace OptimaBank
 
         private void InicializarControles()
         {
-            lblUser.Text = ResourcesFile.LabelUser;
-            lblPass.Text = ResourcesFile.LabelPassword;
+            lblUser.Text = "Usuario:";//ResourcesFile.LabelUser;
+            lblPass.Text = "Clave:"; //ResourcesFile.LabelPassword;
         }
 
         private void FrmLogin_Load(object sender, EventArgs e)
