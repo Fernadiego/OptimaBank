@@ -9,6 +9,8 @@ using OptimaBank.ApplicationLogic.Interfaces;
 using OptimaBank.ApplicationLogic.PlazoFijo;
 using OptimaBank.UI;
 using OptimaBank.UI.Controllers;
+using OptimaBank.Services.Interfaces;
+using OptimaBank.Services.DataModel;
 
 namespace OptimaBank
 {
@@ -36,26 +38,38 @@ namespace OptimaBank
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            // PLAZO FIJO
-            services.AddScoped<IPlazoFijoRepository, PlazoFijoRepository>();
-            services.AddScoped<IPlazoFijoApplicationService, PlazoFijoApplicationService>();
-            services.AddScoped<PlazoFijoController>();
-            services.AddScoped<FrmPlazoFijo>();
+            services.AddScoped<FrmMain>();
 
-            services.AddScoped<FrmMain>()
-                .AddScoped<FrmLogin>()
+            // DATA MODEL SERVICIOS
+            services.AddScoped<IDataModelRepository, DataModelRepository>()
+                .AddScoped<IDataModelService, DataModelService>()
+                .AddScoped<PlazoFijoController>();
+
+            // USUARIO
+            services.AddScoped<FrmLogin>()
+                .AddScoped<UsuarioController>()
+                .AddScoped<IEncriptarApplicationService, EncriptarApplicationService>()
+                .AddScoped<ILoginAppService<Usuario>, LoginAppService>()
                 .AddScoped<IApplicationManager<Usuario>, ApplicationManager<Usuario>>()
-                .AddScoped<IApplicationManager<Telefono>, ApplicationManager<Telefono>>()
+                .AddScoped<IRepositoryManager<Usuario>, RepositoryManager<Usuario>>();
+
+            // PLAZO FIJO
+            services.AddScoped<FrmPlazoFijo>()
+                .AddScoped<PlazoFijoController>()
+                .AddScoped<IPlazoFijoRepository, PlazoFijoRepository>()
+                .AddScoped<IPlazoFijoApplicationService, PlazoFijoApplicationService>();
+                
+            services.AddScoped<IApplicationManager<Telefono>, ApplicationManager<Telefono>>()
                 .AddScoped<IApplicationManager<Componente>, ApplicationManager<Componente>>()
                 .AddScoped<IApplicationManager<UsuarioPermiso>, ApplicationManager<UsuarioPermiso>>()
                 .AddScoped<IApplicationManager<Permiso>, ApplicationManager<Permiso>>()
 
-                .AddScoped<IRepositoryManager<Usuario>, RepositoryManager<Usuario>>()
+                
                 .AddScoped<IRepositoryManager<Telefono>, RepositoryManager<Telefono>>()
                 .AddScoped<IRepositoryManager<Componente>, RepositoryManager<Componente>>()
                 .AddScoped<IRepositoryManager<Permiso>, RepositoryManager<Permiso>>()
                 .AddScoped<IRepositoryManager<UsuarioPermiso>, RepositoryManager<UsuarioPermiso>>()
-
+                
                 .AddScoped<IDbContext<Usuario>, DbContext<Usuario>>()
                 .AddScoped<IDbContext<Telefono>, DbContext<Telefono>>()
                 .AddScoped<IDbContext<Componente>, DbContext<Componente>>()
@@ -66,7 +80,7 @@ namespace OptimaBank
 
                 .AddScoped<IDataProtectorApp, DataProtectorAppService>()
 
-                .AddScoped(typeof(IEncriptarAppService), typeof(EncriptarAppService))
+                .AddScoped(typeof(IEncriptarApplicationService), typeof(EncriptarApplicationService))
                 .AddScoped(typeof(ILoginAppService<Usuario>), typeof(LoginAppService))
                 .AddScoped(typeof(IUsuarioRepository), typeof(UsuarioRepository));
 

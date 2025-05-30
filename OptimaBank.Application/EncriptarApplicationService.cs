@@ -1,15 +1,10 @@
-﻿using System.Security.Cryptography;
+﻿using OptimaBank.ApplicationLogic.Interfaces;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace OptimaBank.ApplicationLogic
 {
-
-    public interface IEncriptarAppService
-    {
-        string Encriptar(string password);
-    }
-
-    public class EncriptarAppService : IEncriptarAppService
+    public class EncriptarApplicationService : IEncriptarApplicationService
     {
         public string Encriptar(string palabra)
         {

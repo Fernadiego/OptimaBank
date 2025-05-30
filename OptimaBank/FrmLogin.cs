@@ -1,18 +1,22 @@
 ﻿using OptimaBank.ApplicationLogic;
+using OptimaBank.ApplicationLogic.Interfaces;
 using OptimaBank.Domain;
 using OptimaBank.Services;
+using OptimaBank.UI.Controllers;
 
 namespace OptimaBank
 {
     public partial class FrmLogin : Form
     {
-        ILoginAppService<Usuario> _loginAppServer;
-        IEncriptarAppService _encriptarAppService;
-
-        public FrmLogin(ILoginAppService<Usuario> loginAppServer, IEncriptarAppService encriptarAppService)
+        private readonly UsuarioController _usuarioController;
+        public FrmLogin()
         {
-            _loginAppServer = loginAppServer;
-            _encriptarAppService = encriptarAppService;
+                
+        }
+
+        public FrmLogin(UsuarioController usuarioController)
+        {
+            _usuarioController = usuarioController;
             InitializeComponent();
         }
 
@@ -31,8 +35,8 @@ namespace OptimaBank
         {
             try
             {
-                var _passEncrypted = _encriptarAppService.Encriptar(txtPassword.Text);
-                var _login = _loginAppServer.Login(new Usuario(txtUsuario.Text, _passEncrypted));
+                //var _passEncrypted = _encriptarAppService.Encriptar(txtPassword.Text);
+                var _login = _usuarioController.Login(txtUsuario.Text, txtPassword.Text);
 
                 FrmMain main = (FrmMain)this.MdiParent;
                 main.ValidarFormulario();

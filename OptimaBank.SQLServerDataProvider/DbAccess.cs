@@ -22,7 +22,8 @@ namespace OptimaBank.SQLServerDataProvider
 
                 //Server=localhost\MSSQLSERVER01;Database=master;Trusted_Connection=True;
                 connection = new SqlConnection();
-                connection.ConnectionString = "Initial Catalog=AMSTEL; Data Source=.; Integrated Security=SSPI";
+                //connection.ConnectionString = "Initial Catalog=OptimaBank; Data Source=.; Integrated Security=SSPI";
+                connection.ConnectionString = "Initial Catalog=OptimaBank; Data Source=(localdb)\\LocalDB;Integrated Security=SSPI";
                 connection.Open();
             }
         }
