@@ -19,6 +19,8 @@ namespace OptimaBank.SQLServerDataProvider
         {
             if (connection != null && connection.State == ConnectionState.Closed || connection == null)
             {
+
+                //Server=localhost\MSSQLSERVER01;Database=master;Trusted_Connection=True;
                 connection = new SqlConnection();
                 connection.ConnectionString = "Initial Catalog=AMSTEL; Data Source=.; Integrated Security=SSPI";
                 connection.Open();
