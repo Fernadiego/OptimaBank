@@ -16,20 +16,15 @@ namespace OptimaBank.Repository
             _context = context;
         }
 
-        public IList<T> GetAllAsync()
+        public IList<T> GetAll()
         {
-            return _context.GetAllAsync();
+            return _context.GetAll();
         }
 
-        public T GetByIdAsync(int id)
+        public T GetById(int id)
         {
-            return _context.GetByIdAsync(id);
+            return _context.GetById(id);
         }
-
-        //public T GetUserByCredentials(string user, string password)
-        //{
-        //    return _context.GetUserByCredentials(user, password);
-        //}
 
         public bool Exists(T entity)
         {
@@ -39,6 +34,11 @@ namespace OptimaBank.Repository
         public T SaveAs(T entity)
         {
             return _context.SaveAs(entity);
+        }
+
+        public T Update(T entity)
+        {
+            return _context.Update(entity);
         }
     }
 }

@@ -10,12 +10,13 @@ namespace OptimaBank.UI.Controllers
         private IEncriptarApplicationService _encriptarAppService;
         private ILoginAppService<Usuario> _loginAppServer;
 
-        public UsuarioController(IEncriptarApplicationService encriptarAppService)
+        public UsuarioController(IEncriptarApplicationService encriptarAppService, ILoginAppService<Usuario> loginAppServer)
         {
             _encriptarAppService = encriptarAppService;
+            _loginAppServer = loginAppServer;
         }
 
-        public LoginResult Login(string username, string password) 
+        public LoginResult AutenticarUsuario(string username, string password) 
         {
             var _passEncrypted = _encriptarAppService.Encriptar(password);
             return _loginAppServer.Login(new Usuario(username, _passEncrypted));

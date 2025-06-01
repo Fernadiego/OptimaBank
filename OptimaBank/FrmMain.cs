@@ -1,32 +1,25 @@
-using OptimaBank.Abstractions;
-using OptimaBank.ApplicationLogic;
-using OptimaBank.ApplicationLogic.Interfaces;
-using OptimaBank.Domain;
 using OptimaBank.Services;
 using OptimaBank.UI.Controllers;
-using System.Windows.Forms;
 
 namespace OptimaBank
 {
     public partial class FrmMain : Form
     {
         private readonly UsuarioController _usuarioController;
+        private readonly MenuController _menuController;
 
+        //IApplicationManager<Usuario> _app;
+        //IDataProtectorApp _data;
+        //IApplicationManager<Componente> _patenteApp;
+        //IApplicationManager<UsuarioPermiso> _usuPemiso;
 
-
-        IApplicationManager<Usuario> _app;
-        IDataProtectorApp _data;
-
-        IApplicationManager<Componente> _patenteApp;
-
-        IApplicationManager<UsuarioPermiso> _usuPemiso;
-
-        public FrmMain(UsuarioController usuarioController)
+        public FrmMain(UsuarioController usuarioController, MenuController menuController)
             //IApplicationManager<Usuario> app,
             //IApplicationManager<Componente> patenteApp,
             //IDataProtectorApp data, IApplicationManager<UsuarioPermiso> usuPemiso)
         {
             _usuarioController = usuarioController;
+            _menuController = menuController;
 
             InitializeComponent();
             ValidarFormulario();
@@ -34,10 +27,8 @@ namespace OptimaBank
             //_patenteApp = patenteApp;
             //_data = data;
             //_usuPemiso = usuPemiso;
-
             //ValidarForm();
             PrepareMenuVer();
-
         }
 
         #region Eventos
@@ -96,9 +87,12 @@ namespace OptimaBank
             cerrarToolStripMenuItem.Text = "Cerrar"; //ResourcesFile.MenuClose;
         }
 
-        public void CargarMenuSegunPermisos()
+        public void CargarMenuSegunPerfil()
         {
             UserProfile Profile = SingletonSession.GetInstance.Perfil;
+
+            var menu = _menuController.TraerMenu();
+            var submenu = _menuController.TraerSubMenu();
 
             if (Profile == UserProfile.DEFAULT)
             {

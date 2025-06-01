@@ -13,17 +13,6 @@ namespace OptimaBank.SQLServerDataProvider
 {
     public class Helper
     {
-        //    public static List<T> ConvertDataTable<T>(DataTable dt)
-        //    {
-        //        List<T> data = new List<T>();
-        //        foreach (DataRow row in dt.Rows)
-        //        {
-        //            T item = GetItem<T>(row);
-        //            data.Add(item);
-        //        }
-        //        return data;
-        //    }
-
         public static string GetSqlOperation(TypeOperation op) => op switch
         {
             TypeOperation.ALTA => "INSERT",
@@ -35,6 +24,51 @@ namespace OptimaBank.SQLServerDataProvider
             _ => "",
         };
 
+        public static T MapReaderToEntity<T>(SqlDataReader reader)
+        {
+            var result = Activator.CreateInstance<T>();
+            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                    .Where(p => p.CanWrite)
+                                    .ToDictionary(p => p.Name, p => p);
+
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                string columnName = reader.GetName(i);
+                if (properties.TryGetValue(columnName, out PropertyInfo prop))
+                {
+                    var value = reader[i];
+                    if (value != System.DBNull.Value)
+                    {
+                        if (prop.PropertyType == typeof(DateTime?))
+                        {
+                            prop.SetValue(result, Convert.ToDateTime(value));
+                        }
+                        else if (prop.PropertyType == typeof(int?))
+                        {
+                            prop.SetValue(result, Convert.ToInt32(value));
+                        }
+                        else if (prop.PropertyType == typeof(decimal?))
+                        {
+                            prop.SetValue(result, Convert.ToDecimal(value));
+                        }
+                        else if (prop.PropertyType == typeof(bool?))
+                        {
+                            prop.SetValue(result, Convert.ToBoolean(value));
+                        }
+                        else if (prop.PropertyType.IsEnum)
+                        {
+                            prop.SetValue(result, Enum.ToObject(prop.PropertyType, value));
+                        }
+                        else
+                        {
+                            prop.SetValue(result, Convert.ChangeType(value, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType));
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
         public static T GetItem<T>(DataRow dr)
         {
             Type temp = typeof(T);
@@ -45,7 +79,15 @@ namespace OptimaBank.SQLServerDataProvider
                 foreach (PropertyInfo pro in temp.GetProperties())
                 {
                     if (pro.Name == column.ColumnName)
-                        pro.SetValue(obj, dr[column.ColumnName], null);
+                        if(dr[column.ColumnName] != DBNull.Value)
+                            if (pro.PropertyType.IsEnum)
+                                pro.SetValue(obj, Enum.Parse(pro.PropertyType, dr[column.ColumnName].ToString()), null);
+                            else if (pro.PropertyType == typeof(DateTime))
+                                pro.SetValue(obj, Convert.ToDateTime(dr[column.ColumnName]), null);
+                            else if (pro.PropertyType == typeof(int) || pro.PropertyType == typeof(long) || pro.PropertyType == typeof(decimal) || pro.PropertyType == typeof(double))
+                                pro.SetValue(obj, Convert.ChangeType(dr[column.ColumnName], pro.PropertyType), null);
+                            else
+                                pro.SetValue(obj, dr[column.ColumnName], null);
                     else
                         continue;
                 }

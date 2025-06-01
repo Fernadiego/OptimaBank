@@ -8,7 +8,7 @@ namespace OptimaBank.SQLServerDataProvider
 {
     public class DbAccess<T>
     {
-        SqlConnection connection = new SqlConnection();
+        public SqlConnection connection = new SqlConnection();
 
         public DbAccess()
         {
@@ -119,14 +119,30 @@ namespace OptimaBank.SQLServerDataProvider
             return ret;
         }
 
-        public DataTable Leer(string SQL, CommandType tipo, SqlParameter[] parametros)
+        public DataTable Leer(string sql, CommandType tipo, SqlParameter[] parametros)
         {
             DataTable tabla = new DataTable();
-            SqlCommand cmd = CrearComando(SQL, tipo, parametros);
-            SqlDataAdapter adaptador = new SqlDataAdapter();
+            //SqlCommand cmd = CrearComando(SQL, tipo, parametros);
+            //SqlDataAdapter adaptador = new SqlDataAdapter();
 
-            adaptador.SelectCommand = cmd;
-            adaptador.Fill(tabla);
+            //adaptador.SelectCommand = cmd;
+            //adaptador.Fill(tabla);
+
+
+            using (var command = new SqlCommand(sql))
+            {
+                command.CommandType = tipo;
+
+                if (parametros != null && parametros.Length > 0)
+                {
+                    command.Parameters.AddRange(parametros);
+                }
+
+                using (var reader = command.ExecuteReader())
+                {
+                    tabla.Load(reader);
+                }
+            }
 
             return tabla;
         }

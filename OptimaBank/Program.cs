@@ -11,6 +11,7 @@ using OptimaBank.UI;
 using OptimaBank.UI.Controllers;
 using OptimaBank.Services.Interfaces;
 using OptimaBank.Services.DataModel;
+using OptimaBank.ApplicationLogic.Menues;
 
 namespace OptimaBank
 {
@@ -52,6 +53,19 @@ namespace OptimaBank
                 .AddScoped<ILoginAppService<Usuario>, LoginAppService>()
                 .AddScoped<IApplicationManager<Usuario>, ApplicationManager<Usuario>>()
                 .AddScoped<IRepositoryManager<Usuario>, RepositoryManager<Usuario>>();
+
+            // MENU
+            services.AddScoped<MenuController>()
+                .AddScoped<IMenuApplicationService<Menu>, MenuApplicationService>()
+                .AddScoped<IApplicationManager<Menu>, ApplicationManager<Menu>>()
+                .AddScoped<IRepositoryManager<Menu>, RepositoryManager<Menu>>()
+                .AddScoped<IDbContext<Menu>, DbContext<Menu>>();
+
+            // SUBMENU
+            services.AddScoped<ISubMenuApplicationService<Submenu>, SubMenuApplicationService>()
+                .AddScoped<IApplicationManager<Submenu>, ApplicationManager<Submenu>>()
+                .AddScoped<IRepositoryManager<Submenu>, RepositoryManager<Submenu>>()
+                .AddScoped<IDbContext<Submenu>, DbContext<Submenu>>();
 
             // PLAZO FIJO
             services.AddScoped<FrmPlazoFijo>()

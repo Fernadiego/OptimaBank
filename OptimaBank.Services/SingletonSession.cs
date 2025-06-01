@@ -8,7 +8,6 @@ namespace OptimaBank.Services
 
         private SingletonSession()
         {
-
         }
 
         public static Session GetInstance
