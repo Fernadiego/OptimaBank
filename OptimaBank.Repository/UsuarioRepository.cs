@@ -13,6 +13,11 @@ namespace OptimaBank.Repository
             this._context = context;
         }
 
+        public bool GetUserByName(string NombreUsuario)
+        {
+            return _context.GetUserByName(NombreUsuario);
+        }
+
         public Usuario GetCredentials(string usuario, string contrasena)
         {
             return _context.GetUserByCredentials(usuario, contrasena);

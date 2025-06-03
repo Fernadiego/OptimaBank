@@ -26,9 +26,9 @@ namespace OptimaBank.ApplicationLogic
             return _repository.GetById(Id);
         }
 
-        public T SaveAs(T entity)
+        public T Insert(T entity)
         {
-            return _repository.SaveAs(entity);
+            return _repository.Insert(entity);
         }
 
         public T Update(T entity)

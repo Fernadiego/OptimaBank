@@ -36,8 +36,8 @@
             lblPass = new Label();
             BtnCancelar = new Button();
             panel1 = new Panel();
-            button2 = new Button();
-            button1 = new Button();
+            btnOlvidePass = new Button();
+            btnRegistrarse = new Button();
             pictureBox1 = new PictureBox();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -117,8 +117,8 @@
             // panel1
             // 
             panel1.BackColor = Color.RoyalBlue;
-            panel1.Controls.Add(button2);
-            panel1.Controls.Add(button1);
+            panel1.Controls.Add(btnOlvidePass);
+            panel1.Controls.Add(btnRegistrarse);
             panel1.Controls.Add(pictureBox1);
             panel1.Dock = DockStyle.Left;
             panel1.Location = new Point(0, 0);
@@ -127,37 +127,38 @@
             panel1.Size = new Size(195, 182);
             panel1.TabIndex = 6;
             // 
-            // button2
+            // btnOlvidePass
             // 
-            button2.BackColor = Color.LightGray;
-            button2.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
-            button2.Location = new Point(99, 152);
-            button2.Margin = new Padding(3, 2, 3, 2);
-            button2.Name = "button2";
-            button2.Size = new Size(90, 22);
-            button2.TabIndex = 8;
-            button2.Text = "Olvidé Password";
-            button2.UseVisualStyleBackColor = false;
+            btnOlvidePass.BackColor = Color.LightGray;
+            btnOlvidePass.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
+            btnOlvidePass.Location = new Point(99, 143);
+            btnOlvidePass.Margin = new Padding(3, 2, 3, 2);
+            btnOlvidePass.Name = "btnOlvidePass";
+            btnOlvidePass.Size = new Size(90, 31);
+            btnOlvidePass.TabIndex = 8;
+            btnOlvidePass.Text = "Olvidé Password";
+            btnOlvidePass.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // btnRegistrarse
             // 
-            button1.BackColor = Color.LightGray;
-            button1.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
-            button1.Location = new Point(4, 152);
-            button1.Margin = new Padding(3, 2, 3, 2);
-            button1.Name = "button1";
-            button1.Size = new Size(90, 22);
-            button1.TabIndex = 7;
-            button1.Text = "Registrarse";
-            button1.UseVisualStyleBackColor = false;
+            btnRegistrarse.BackColor = Color.LightGray;
+            btnRegistrarse.Font = new Font("Segoe UI", 7F, FontStyle.Bold);
+            btnRegistrarse.Location = new Point(4, 143);
+            btnRegistrarse.Margin = new Padding(3, 2, 3, 2);
+            btnRegistrarse.Name = "btnRegistrarse";
+            btnRegistrarse.Size = new Size(90, 31);
+            btnRegistrarse.TabIndex = 7;
+            btnRegistrarse.Text = "Registrarse";
+            btnRegistrarse.UseVisualStyleBackColor = false;
+            btnRegistrarse.Click += btnRegistrarse_Click;
             // 
             // pictureBox1
             // 
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(47, 32);
+            pictureBox1.Location = new Point(54, 30);
             pictureBox1.Margin = new Padding(3, 2, 3, 2);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(99, 93);
+            pictureBox1.Size = new Size(85, 85);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -202,7 +203,7 @@
         private Button BtnCancelar;
         private Panel panel1;
         private PictureBox pictureBox1;
-        private Button button2;
-        private Button button1;
+        private Button btnOlvidePass;
+        private Button btnRegistrarse;
     }
 }

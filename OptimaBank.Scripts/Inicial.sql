@@ -52,7 +52,7 @@ IF EXISTS (SELECT * FROM sys.tables WHERE name = 'OB_ROL')
 GO
 
 IF EXISTS (SELECT * FROM sys.tables WHERE name = 'USUARIO')
-    DROP TABLE OB_USUARIO
+    DROP TABLE USUARIO
 GO
 
 -- Crear tablas
@@ -60,8 +60,7 @@ CREATE TABLE USUARIO (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     NombreUsuario VARCHAR(10) NOT NULL UNIQUE,
     Contrasena VARCHAR(80) NOT NULL,
-    Nombre VARCHAR(50) NOT NULL,
-    Email VARCHAR(20),
+    Email VARCHAR(160),
     Activo BIT DEFAULT 1,
     FechaCreacion DATETIME DEFAULT GETDATE(),
     FechaModificacion DATETIME,
@@ -71,7 +70,7 @@ CREATE TABLE USUARIO (
 )
 GO
 
-CREATE TABLE OB_ROL (
+CREATE TABLE ROL (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Nombre VARCHAR(50) NOT NULL UNIQUE,
     Descripcion VARCHAR(200)
@@ -83,7 +82,7 @@ CREATE TABLE OB_USUARIO_ROL (
     RolId INT,
     PRIMARY KEY (UsuarioId, RolId),
     FOREIGN KEY (UsuarioId) REFERENCES USUARIO(Id),
-    FOREIGN KEY (RolId) REFERENCES OB_ROL(Id)
+    FOREIGN KEY (RolId) REFERENCES ROL(Id)
 )
 GO
 
@@ -117,7 +116,7 @@ CREATE TABLE OB_PERMISO (
     PuedeVer BIT DEFAULT 0,
     PuedeEditar BIT DEFAULT 0,
     PuedeEliminar BIT DEFAULT 0,
-    FOREIGN KEY (RolID) REFERENCES OB_ROL(Id),
+    FOREIGN KEY (RolID) REFERENCES ROL(Id),
     FOREIGN KEY (SubMenuID) REFERENCES OB_SUBMENU(Id)
 )
 GO
@@ -138,9 +137,9 @@ INSERT INTO SUBMENU (MenuId, NombreSubMenu, Descripcion, Orden, Formulario) VALU
 (3, 'Reporte Mensual', 'Reportes mensuales', 2, 'frmReporteMensual')
 GO
 
-INSERT INTO OB_ROL (Nombre, Descripcion) VALUES
-('Administrador', 'Acceso total al sistema'),
-('Usuario', 'Acceso básico al sistema')
+INSERT INTO ROL (Nombre, Descripcion) VALUES
+('ADMINISTRADOR', 'Acceso total al sistema'),
+('USUARIO', 'Acceso básico al sistema')
 GO
 
 -- Crear procedimientos almacenados
@@ -152,12 +151,11 @@ BEGIN
     SELECT 
         u.Id,
         u.NombreUsuario,
-        u.Nombre,
         u.Email,
         r.Nombre as RolNombre
     FROM USUARIO u
     INNER JOIN OB_USUARIO_ROL ur ON u.Id = ur.UsuarioId
-    INNER JOIN OB_ROL r ON ur.RolId = r.Id
+    INNER JOIN ROL r ON ur.RolId = r.Id
     WHERE u.NombreUsuario = @Usuario 
     AND u.Contrasena = @Contrasena
     AND u.Activo = 1
@@ -207,8 +205,8 @@ END
 GO
 
 -- Insertar usuario administrador por defecto
-INSERT INTO USUARIO (NombreUsuario, Contrasena, Nombre, Email)
-VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'Administrador', 'admin@optimabank.com')
+INSERT INTO USUARIO (NombreUsuario, Contrasena, Email)
+VALUES ('admin', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 'admin@optimabank.com')
 GO
 
 -- Asignar rol de administrador al usuario admin

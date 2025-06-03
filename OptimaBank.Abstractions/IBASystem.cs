@@ -6,7 +6,7 @@ namespace OptimaBank.Abstractions
         IList<T> GetAll();
         T GetById(int Id);
         bool Exists(T entity);
-        T SaveAs(T entity);
+        T Insert(T entity);
         T Update(T entity);
         //void DeleteAsync(int id);
     }

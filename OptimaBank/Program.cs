@@ -12,6 +12,8 @@ using OptimaBank.UI.Controllers;
 using OptimaBank.Services.Interfaces;
 using OptimaBank.Services.DataModel;
 using OptimaBank.ApplicationLogic.Menues;
+using OptimaBank.ApplicationLogic.Usuarios;
+using OptimaBank.SQLServerDataProvider.Usuarios;
 
 namespace OptimaBank
 {
@@ -52,7 +54,16 @@ namespace OptimaBank
                 .AddScoped<IEncriptarApplicationService, EncriptarApplicationService>()
                 .AddScoped<ILoginAppService<Usuario>, LoginAppService>()
                 .AddScoped<IApplicationManager<Usuario>, ApplicationManager<Usuario>>()
-                .AddScoped<IRepositoryManager<Usuario>, RepositoryManager<Usuario>>();
+                .AddScoped<IRepositoryManager<Usuario>, RepositoryManager<Usuario>>()
+                .AddScoped<IDbContext<Usuario>, DbContext<Usuario>>()
+                .AddScoped<IUsuarioApplicationService<Usuario>, UsuarioApplicationService>();
+                //.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+            // USUARIO-ROL
+            services.AddScoped<IUsuarioRolApplicationService<UsuarioRol>, UsuarioRolApplicationService>()
+                .AddScoped<IRepositoryManager<UsuarioRol>, RepositoryManager<UsuarioRol>>()
+                .AddScoped<IDbContext<UsuarioRol>, DbContext<UsuarioRol>>()
+                .AddScoped<IUsuarioDbContext, UsuarioDbContext>();
 
             // MENU
             services.AddScoped<MenuController>()
@@ -75,20 +86,20 @@ namespace OptimaBank
                 
             services.AddScoped<IApplicationManager<Telefono>, ApplicationManager<Telefono>>()
                 .AddScoped<IApplicationManager<Componente>, ApplicationManager<Componente>>()
-                .AddScoped<IApplicationManager<UsuarioPermiso>, ApplicationManager<UsuarioPermiso>>()
+                .AddScoped<IApplicationManager<UsuarioRol>, ApplicationManager<UsuarioRol>>()
                 .AddScoped<IApplicationManager<Permiso>, ApplicationManager<Permiso>>()
 
                 
                 .AddScoped<IRepositoryManager<Telefono>, RepositoryManager<Telefono>>()
                 .AddScoped<IRepositoryManager<Componente>, RepositoryManager<Componente>>()
                 .AddScoped<IRepositoryManager<Permiso>, RepositoryManager<Permiso>>()
-                .AddScoped<IRepositoryManager<UsuarioPermiso>, RepositoryManager<UsuarioPermiso>>()
+                .AddScoped<IRepositoryManager<UsuarioRol>, RepositoryManager<UsuarioRol>>()
                 
                 .AddScoped<IDbContext<Usuario>, DbContext<Usuario>>()
                 .AddScoped<IDbContext<Telefono>, DbContext<Telefono>>()
                 .AddScoped<IDbContext<Componente>, DbContext<Componente>>()
                 .AddScoped<IDbContext<Permiso>, DbContext<Permiso>>()
-                .AddScoped<IDbContext<UsuarioPermiso>, DbContext<UsuarioPermiso>>()
+                .AddScoped<IDbContext<UsuarioRol>, DbContext<UsuarioRol>>()
 
                 .AddScoped<IUsuarioDbContext, UsuarioDbContext>()
 

@@ -94,6 +94,24 @@ namespace OptimaBank
             var menu = _menuController.TraerMenu();
             var submenu = _menuController.TraerSubMenu();
 
+            foreach (var item in menu)
+            {
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(item.Descripcion);
+                menuItem.Name = item.Descripcion;
+                foreach (var subItem in submenu)
+                {
+                    if (item.Id == subItem.MenuId)
+                    {
+                        ToolStripMenuItem subMenuItem = new ToolStripMenuItem(subItem.Descripcion);
+                        subMenuItem.Name = subItem.Descripcion;
+                        subMenuItem.Click += new EventHandler(Menu_Click);
+                        menuItem.DropDownItems.Add(subMenuItem);
+                    }
+                }
+
+                menuStrip1.Items.Add(menuItem);
+            }   
+
             if (Profile == UserProfile.DEFAULT)
             {
                 tssMensaje.Text = "No tiene permisos cargados.";

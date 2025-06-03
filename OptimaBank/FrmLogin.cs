@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
-using OptimaBank.ApplicationLogic;
-using OptimaBank.ApplicationLogic.Interfaces;
-using OptimaBank.Domain;
-using OptimaBank.Services;
+﻿using OptimaBank.Services;
+using OptimaBank.UI;
 using OptimaBank.UI.Controllers;
 
 namespace OptimaBank
@@ -12,7 +9,7 @@ namespace OptimaBank
         private readonly UsuarioController _usuarioController;
         public FrmLogin()
         {
-                
+
         }
 
         public FrmLogin(UsuarioController usuarioController)
@@ -72,6 +69,15 @@ namespace OptimaBank
         private void BtnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnRegistrarse_Click(object sender, EventArgs e)
+        {
+            FrmRegistrarse registro = new FrmRegistrarse(_usuarioController);
+            registro.MdiParent = (FrmMain)this.MdiParent;
+            registro.StartPosition = FormStartPosition.Manual;
+            registro.Location = new Point((Screen.PrimaryScreen.Bounds.Width - registro.Width) / 2, 100);
+            registro.Show();
         }
     }
 }

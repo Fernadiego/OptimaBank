@@ -31,9 +31,9 @@ namespace OptimaBank.Repository
             return _context.Exists(entity);
         }
 
-        public T SaveAs(T entity)
+        public T Insert(T entity)
         {
-            return _context.SaveAs(entity);
+            return _context.Insert(entity);
         }
 
         public T Update(T entity)

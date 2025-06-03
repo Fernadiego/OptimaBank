@@ -18,6 +18,8 @@ namespace OptimaBank.Domain
 
         public string Contrasena { get; set; }
 
+        public string Email { get; set; }
+
         public bool Activo { get; set; }
 
         public DateTime? FechaCreacion { get; set; }

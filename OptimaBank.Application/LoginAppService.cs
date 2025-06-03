@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
 using OptimaBank.Abstractions;
+using OptimaBank.ApplicationLogic.Interfaces;
 using OptimaBank.Domain;
 using OptimaBank.Repository;
 using OptimaBank.Repository.Interfaces;
@@ -14,16 +15,18 @@ namespace OptimaBank.ApplicationLogic
 
     public class LoginAppService : ILoginAppService<Usuario>
     {
-        IUsuarioRepository _usuarioRepository;
-        IRepositoryManager<Usuario> _usuarioRepositoryManager;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IRepositoryManager<Usuario> _usuarioRepositoryManager;
+        private readonly IEncriptarApplicationService _encriptarAppService;
 
         //IRepositoryManager<Permiso> _permiso;
         //IRepositoryManager<UsuarioPermiso> _usuPermiso;
 
-        public LoginAppService(IUsuarioRepository usuarioRepository, IRepositoryManager<Usuario> usuarioRepositoryManager)
+        public LoginAppService(IUsuarioRepository usuarioRepository, IRepositoryManager<Usuario> usuarioRepositoryManager, IEncriptarApplicationService encriptarAppService)
         {
             _usuarioRepository = usuarioRepository;
             _usuarioRepositoryManager = usuarioRepositoryManager;
+            _encriptarAppService = encriptarAppService;
         }
 
         public LoginResult Login(Usuario Credenciales)
@@ -41,7 +44,8 @@ namespace OptimaBank.ApplicationLogic
 
                 if (user != null && user.NombreUsuario == Credenciales.NombreUsuario)
                 {
-                    if (user.Contrasena == Credenciales.Contrasena)
+                    var _passEncrypted = _encriptarAppService.Encriptar(Credenciales.Contrasena);
+                    if (user.Contrasena == _passEncrypted)
                     {
                         if (user.Activo)
                         {
@@ -77,14 +81,25 @@ namespace OptimaBank.ApplicationLogic
 
         private void UpdateValidatedUser(Usuario user)
         {
+            DateTime? ultimoAcceso = user.UltimoAcceso;
             user.UltimoAcceso = DateTime.Now;
             user.CantidadIntentos = 0;
             _usuarioRepositoryManager.Update(user);
+            user.UltimoAcceso = ultimoAcceso;
         }
 
         private void UpdateAttempts(Usuario user)
         {
-            user.CantidadIntentos =+ 1;
+            if (user.CantidadIntentos < 3)
+            {
+                user.CantidadIntentos += 1;
+            }
+
+            if (user.CantidadIntentos >= 3)
+            {
+                user.Activo = false;
+            }
+
             _usuarioRepositoryManager.Update(user);
         }
 
