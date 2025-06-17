@@ -24,9 +24,9 @@ namespace OptimaBank.ApplicationLogic
         public string Proteger(string texto)
         {
             string encryptedEmail = _protector.Protect("profileDto.Email");
-            string encryptedPhone = _protector.Protect("1556467653");
+            //string encryptedPhone = _protector.Protect("1556467653");
 
-            _repository.SaveAs(new Telefono() { Numero = encryptedPhone, TipoId = 1 });
+            //_repository.Insert(new Telefono() { Numero = encryptedPhone, TipoId = 1 });
 
             return encryptedEmail;
         }

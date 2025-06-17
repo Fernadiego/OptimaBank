@@ -1,5 +1,4 @@
 ﻿using OptimaBank.ApplicationLogic.Interfaces;
-using OptimaBank.ApplicationLogic.PlazoFijo;
 
 namespace OptimaBank.UI.Controllers
 {

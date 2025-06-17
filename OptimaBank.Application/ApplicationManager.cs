@@ -16,24 +16,24 @@ namespace OptimaBank.ApplicationLogic
             return _repository.Exists(entity);
         }
 
-        public IList<T> GetAllAsync()
+        public IList<T> GetAll()
         {
-            return _repository.GetAllAsync();
+            return _repository.GetAll();
         }
 
-        public T GetByIdAsync(int Id)
+        public T GetById(int Id)
         {
-            return _repository.GetByIdAsync(Id);
+            return _repository.GetById(Id);
         }
 
-        //public T GetUserByCredentials(string user, string password)
-        //{
-        //    return _repository.GetUserByCredentials(user, password);
-        //}
-
-        public T SaveAs(T entity)
+        public T Insert(T entity)
         {
-            return _repository.SaveAs(entity);
+            return _repository.Insert(entity);
+        }
+
+        public T Update(T entity)
+        {
+            return _repository.Update(entity);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using OptimaBank.Abstractions;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using OptimaBank.Abstractions;
+using OptimaBank.ApplicationLogic.Interfaces;
 using OptimaBank.Domain;
 using OptimaBank.Repository;
 using OptimaBank.Repository.Interfaces;
 using OptimaBank.Services;
-using Microsoft.VisualBasic.Logging;
-using System.Collections.Generic;
 
 namespace OptimaBank.ApplicationLogic
 {
@@ -15,89 +15,127 @@ namespace OptimaBank.ApplicationLogic
 
     public class LoginAppService : ILoginAppService<Usuario>
     {
-        IUsuarioRepository _repository;
-        IRepositoryManager<Permiso> _permiso;
-        IRepositoryManager<UsuarioPermiso> _usuPermiso;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IRepositoryManager<Usuario> _usuarioRepositoryManager;
+        private readonly IEncriptarApplicationService _encriptarAppService;
 
-        public LoginAppService(IUsuarioRepository repository,
-            IRepositoryManager<Permiso> permiso,
-            IRepositoryManager<UsuarioPermiso> usuPermiso)
+        //IRepositoryManager<Permiso> _permiso;
+        //IRepositoryManager<UsuarioPermiso> _usuPermiso;
+
+        public LoginAppService(IUsuarioRepository usuarioRepository, IRepositoryManager<Usuario> usuarioRepositoryManager, IEncriptarApplicationService encriptarAppService)
         {
-            _repository = repository;
-            _permiso = permiso;
-            _usuPermiso = usuPermiso;
+            _usuarioRepository = usuarioRepository;
+            _usuarioRepositoryManager = usuarioRepositoryManager;
+            _encriptarAppService = encriptarAppService;
         }
 
         public LoginResult Login(Usuario Credenciales)
         {
-            if (string.IsNullOrEmpty(Credenciales.User) || string.IsNullOrEmpty(Credenciales.Password)) 
-                return LoginResult.UserOPassNull;
-
-            if (SingletonSession.GetInstance.IsLogged())
-                throw new Exception("Ya hay una sesión iniciada");
-
-            var user = _repository.GetUserByCredentials(Credenciales.User, Credenciales.Password);
-
-            if (user != null && user.User == Credenciales.User && user.Password == Credenciales.Password)
+            try
             {
-                if (user.Habilitado)
+                if (string.IsNullOrEmpty(Credenciales.NombreUsuario) || string.IsNullOrEmpty(Credenciales.Contrasena))
+                    return LoginResult.UserOPassNull;
+
+                if (SingletonSession.GetInstance.IsLogged())
+                    throw new Exception("Ya hay una sesión iniciada");
+
+                //var user = _usuarioRepositoryManager.GetById(Credenciales.Id);
+                var user = _usuarioRepository.GetCredentials(Credenciales.NombreUsuario, Credenciales.Contrasena);
+
+                if (user != null && user.NombreUsuario == Credenciales.NombreUsuario)
                 {
-                    IList<Permiso> patentes = GetPermisos();
-                    if (HasLoginPermissions(patentes))
+                    var _passEncrypted = _encriptarAppService.Encriptar(Credenciales.Contrasena);
+                    if (user.Contrasena == _passEncrypted)
                     {
-                        var perfil = AppHelper.GetEnumUserProfileByString(GetProfileUser(patentes));
-                        
-                        SingletonSession.GetInstance.Init((IUsuario)user, perfil);
-                        return LoginResult.ValidUser;
+                        if (user.Activo)
+                        {
+                            //var perfil = AppHelper.GetEnumUserProfileByString(GetProfileUser(patentes));
+                            SingletonSession.GetInstance.Init((IUsuario)user, UserProfile.ADMINISTRADOR);
+                            UpdateValidatedUser(user);
+                            return LoginResult.ValidUser;
+
+                        }
+                        else
+                            return LoginResult.UserDisabled;
                     }
                     else
-                        return LoginResult.UserWithgoutPermissions;
+                    {
+                        UpdateAttempts(user);
+                        return LoginResult.InvalidUsername;
+                    }
                 }
                 else
-                    return LoginResult.UserDisabled;
+                    return LoginResult.InvalidUsername;
             }
-            else
-                return LoginResult.InvalidUsername;
-
+            catch (Exception ex)
+            {
+                return LoginResult.InvalidPassword;
+                //return _exceptionHandler.HandleException(ex);
+            }
         }
 
         public void Logout()
         {
-            SingletonSession.GetInstance.Close(); 
+            SingletonSession.GetInstance.Close();
+        }
+
+        private void UpdateValidatedUser(Usuario user)
+        {
+            DateTime? ultimoAcceso = user.UltimoAcceso;
+            user.UltimoAcceso = DateTime.Now;
+            user.CantidadIntentos = 0;
+            _usuarioRepositoryManager.Update(user);
+            user.UltimoAcceso = ultimoAcceso;
+        }
+
+        private void UpdateAttempts(Usuario user)
+        {
+            if (user.CantidadIntentos < 3)
+            {
+                user.CantidadIntentos += 1;
+            }
+
+            if (user.CantidadIntentos >= 3)
+            {
+                user.Activo = false;
+            }
+
+            _usuarioRepositoryManager.Update(user);
         }
 
         private IList<Permiso> GetPermisos()
         {
-            IList<UsuarioPermiso> usuPermisos = _usuPermiso.GetAllAsync();
-            IList<Permiso> permiso =  _permiso.GetAllAsync();
+            //IList<UsuarioPermiso> usuPermisos = _usuPermiso.GetAllAsync();
+            //IList<Permiso> permiso =  _permiso.GetAllAsync();
 
-            var PatenteLogin = from a in usuPermisos
-                               join p in permiso
-                               on a.UsuarioId equals p.Id
-                               where p.EsFamilia == false && p.Nombre == "LOGIN"
-                               select new 
-                               { 
-                                   Nombre = p.Nombre, 
-                                   EsFamilia = p.EsFamilia
-                               };
+            //var PatenteLogin = from a in usuPermisos
+            //                   join p in permiso
+            //                   on a.UsuarioId equals p.Id
+            //                   where p.EsFamilia == false && p.Nombre == "LOGIN"
+            //                   select new 
+            //                   { 
+            //                       Nombre = p.Nombre, 
+            //                       EsFamilia = p.EsFamilia
+            //                   };
 
-            var FamiliaUsuario = from a in usuPermisos
-                               join p in permiso
-                               on a.UsuarioId equals p.Id
-                               where p.EsFamilia == true && p.Nombre != "LOGIN"
-                               select new 
-                               {
-                                   Nombre = p.Nombre,
-                                   EsFamilia = p.EsFamilia
-                               };
+            //var FamiliaUsuario = from a in usuPermisos
+            //                   join p in permiso
+            //                   on a.UsuarioId equals p.Id
+            //                   where p.EsFamilia == true && p.Nombre != "LOGIN"
+            //                   select new 
+            //                   {
+            //                       Nombre = p.Nombre,
+            //                       EsFamilia = p.EsFamilia
+            //                   };
 
-            List<Permiso> Patentes = new List<Permiso>();
-            foreach (var item in PatenteLogin)
-                Patentes.Add(new Permiso() { Nombre = item.Nombre, EsFamilia = item.EsFamilia });
+            //List<Permiso> Patentes = new List<Permiso>();
+            //foreach (var item in PatenteLogin)
+            //    Patentes.Add(new Permiso() { Nombre = item.Nombre, EsFamilia = item.EsFamilia });
 
-            foreach (var item in FamiliaUsuario)
-                Patentes.Add(new Permiso() { Nombre = item.Nombre, EsFamilia = item.EsFamilia });
-            return Patentes;
+            //foreach (var item in FamiliaUsuario)
+            //    Patentes.Add(new Permiso() { Nombre = item.Nombre, EsFamilia = item.EsFamilia });
+            //return Patentes;
+            return null;
         }
 
         private bool HasLoginPermissions(IList<Permiso> patentes)

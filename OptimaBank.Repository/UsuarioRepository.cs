@@ -13,14 +13,14 @@ namespace OptimaBank.Repository
             this._context = context;
         }
 
-        public void Fernandito(string p1)
+        public bool GetUserByName(string NombreUsuario)
         {
-            throw new NotImplementedException();
+            return _context.GetUserByName(NombreUsuario);
         }
 
-        public Usuario GetUserByCredentials(string user, string password)
+        public Usuario GetCredentials(string usuario, string contrasena)
         {
-            return _context.GetUserByCredentials(user, password);
+            return _context.GetUserByCredentials(usuario, contrasena);
         }
     }
 }

@@ -6,18 +6,29 @@ namespace OptimaBank.Domain
     {
         public Usuario()
         {
-            
         }
 
         public Usuario(string user, string password)
         {
-            User = user;
-            Password = password;
+            NombreUsuario = user;
+            Contrasena = password;
         }
 
-        public string User { get; set; }
-        public string Password { get; set; }
-        public DateTime FechaAlta { get; set; }
-        public bool Habilitado { get; set; }
+        public string NombreUsuario { get; set; }
+
+        public string Contrasena { get; set; }
+
+        public string Email { get; set; }
+
+        public bool Activo { get; set; }
+
+        public DateTime? FechaCreacion { get; set; }
+
+        public DateTime? FechaModificacion { get; set; }
+
+        public DateTime? UltimoAcceso { get; set; }
+
+        public int CantidadIntentos { get; set; }
+
     }
 }

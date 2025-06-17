@@ -13,12 +13,12 @@ namespace OptimaBank.Services
             set { _usuario = value; }
         }
 
-        private DateTime _fechaInicio;
+        private DateTime _ultimoAcceso;
 
-        public DateTime FechaInicio
+        public DateTime UltimoAcceso
         {
-            get { return _fechaInicio; }
-            set { _fechaInicio = value; }
+            get { return _ultimoAcceso; }
+            set { _ultimoAcceso = value; }
         }
 
         private UserProfile _perfil;
@@ -40,7 +40,7 @@ namespace OptimaBank.Services
         public void Init(IUsuario usuario, UserProfile perfil)
         {
             _usuario = usuario;
-            _fechaInicio= DateTime.Now;
+            _ultimoAcceso = DateTime.Now;
             _perfil = perfil;
         }
 

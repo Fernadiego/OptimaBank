@@ -1,25 +1,28 @@
-﻿using OptimaBank.ApplicationLogic;
-using OptimaBank.Domain;
-using OptimaBank.Services;
+﻿using OptimaBank.Services;
+using OptimaBank.UI;
+using OptimaBank.UI.Controllers;
 
 namespace OptimaBank
 {
     public partial class FrmLogin : Form
     {
-        ILoginAppService<Usuario> _loginAppServer;
-        IEncriptarAppService _encriptarAppService;
-
-        public FrmLogin(ILoginAppService<Usuario> loginAppServer, IEncriptarAppService encriptarAppService)
+        private readonly UsuarioController _usuarioController;
+        public FrmLogin()
         {
-            _loginAppServer = loginAppServer;
-            _encriptarAppService = encriptarAppService;
+
+        }
+
+        public FrmLogin(UsuarioController usuarioController)
+        {
+            _usuarioController = usuarioController;
             InitializeComponent();
         }
 
         private void InicializarControles()
         {
-            lblUser.Text = ResourcesFile.LabelUser;
-            lblPass.Text = ResourcesFile.LabelPassword;
+            lblUser.Text = "Usuario:";//ResourcesFile.LabelUser;
+            lblPass.Text = "Clave:"; //ResourcesFile.LabelPassword;
+            txtUsuario.Focus();
         }
 
         private void FrmLogin_Load(object sender, EventArgs e)
@@ -31,8 +34,7 @@ namespace OptimaBank
         {
             try
             {
-                var _passEncrypted = _encriptarAppService.Encriptar(txtPassword.Text);
-                var _login = _loginAppServer.Login(new Usuario(txtUsuario.Text, _passEncrypted));
+                var _login = _usuarioController.AutenticarUsuario(txtUsuario.Text, txtPassword.Text);
 
                 FrmMain main = (FrmMain)this.MdiParent;
                 main.ValidarFormulario();
@@ -41,16 +43,21 @@ namespace OptimaBank
                 {
                     main.EscribirConsola(ResourcesFile.LoginOK);
                     main.BackgroundImage = null;
-                    main.CargarMenuSegunPermisos();
+                    main.CargarMenuSegunPerfil();
                     this.Visible = false;
-                    MessageBox.Show("Ultimo ingreso DD/MM/YYYY", ResourcesFile.Bienvenido, MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    var sesionDataNombre = SingletonSession.GetInstance.Usuario.NombreUsuario.ToUpper();
+                    var sesionDataUltAcceso = SingletonSession.GetInstance.Usuario.UltimoAcceso;
+
+                    MessageBox.Show($"{sesionDataNombre} su ultimo ingreso fue el {sesionDataUltAcceso}", ResourcesFile.Bienvenido, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Close();
                 }
                 else
                 {
-                    //if usuario inabilitado continuar
                     main.EscribirConsola(ResourcesFile.LoginNOK);
                     MessageBox.Show(ResourcesFile.LoginNOK, ResourcesFile.Atencion, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtPassword.Text = string.Empty;
+                    txtPassword.Focus();
                 }
             }
             catch (Exception ex)
@@ -62,6 +69,15 @@ namespace OptimaBank
         private void BtnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnRegistrarse_Click(object sender, EventArgs e)
+        {
+            FrmRegistrarse registro = new FrmRegistrarse(_usuarioController);
+            registro.MdiParent = (FrmMain)this.MdiParent;
+            registro.StartPosition = FormStartPosition.Manual;
+            registro.Location = new Point((Screen.PrimaryScreen.Bounds.Width - registro.Width) / 2, 100);
+            registro.Show();
         }
     }
 }

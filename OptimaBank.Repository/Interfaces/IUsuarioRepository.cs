@@ -4,7 +4,7 @@ namespace OptimaBank.Repository.Interfaces
 {
     public interface IUsuarioRepository : IRepositoryManager<Usuario>
     {
-        void Fernandito(string p1);
-        Usuario GetUserByCredentials(string user, string password);
+        bool GetUserByName(string NombreUsuario);
+        Usuario GetCredentials(string usuario, string contrasena);
     }
 }

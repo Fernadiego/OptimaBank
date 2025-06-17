@@ -1,38 +1,34 @@
-using OptimaBank.Abstractions;
-using OptimaBank.ApplicationLogic;
-using OptimaBank.Domain;
 using OptimaBank.Services;
+using OptimaBank.UI.Controllers;
 
 namespace OptimaBank
 {
     public partial class FrmMain : Form
     {
-        IApplicationManager<Usuario> _app;
-        IEncriptarAppService _encriptarAppService;
-        ILoginAppService<Usuario> _login;
-        IDataProtectorApp _data;
+        private readonly UsuarioController _usuarioController;
+        private readonly MenuController _menuController;
 
-        IApplicationManager<Componente> _patenteApp;
+        //IApplicationManager<Usuario> _app;
+        //IDataProtectorApp _data;
+        //IApplicationManager<Componente> _patenteApp;
+        //IApplicationManager<UsuarioPermiso> _usuPemiso;
 
-        IApplicationManager<UsuarioPermiso> _usuPemiso;
-
-        public FrmMain(IApplicationManager<Usuario> app, IEncriptarAppService encriptarAppService,
-            ILoginAppService<Usuario> login,
-            IApplicationManager<Componente> patenteApp,
-            IDataProtectorApp data, IApplicationManager<UsuarioPermiso> usuPemiso)
+        public FrmMain(UsuarioController usuarioController, MenuController menuController)
+            //IApplicationManager<Usuario> app,
+            //IApplicationManager<Componente> patenteApp,
+            //IDataProtectorApp data, IApplicationManager<UsuarioPermiso> usuPemiso)
         {
+            _usuarioController = usuarioController;
+            _menuController = menuController;
+
             InitializeComponent();
             ValidarFormulario();
-            _app = app;
-            _encriptarAppService = encriptarAppService;
-            _login = login;
-            _patenteApp = patenteApp;
-            _data = data;
-            _usuPemiso = usuPemiso;
-
+            //_app = app;
+            //_patenteApp = patenteApp;
+            //_data = data;
+            //_usuPemiso = usuPemiso;
             //ValidarForm();
             PrepareMenuVer();
-
         }
 
         #region Eventos
@@ -44,8 +40,10 @@ namespace OptimaBank
 
         private void iniciarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLogin login = new FrmLogin(_login, _encriptarAppService);
+            FrmLogin login = new FrmLogin(_usuarioController);
             login.MdiParent = this;
+            login.StartPosition = FormStartPosition.Manual;
+            login.Location = new Point((Screen.PrimaryScreen.Bounds.Width - login.Width) / 2, 100);
             login.Show();
         }
 
@@ -81,16 +79,38 @@ namespace OptimaBank
 
         #region Propiedades
 
+        private ToolStripLabel lblUsuario;
         private void InicializarMenu()
         {
-            sesionToolStripMenuItem.Text = ResourcesFile.MenuSession;
-            iniciarToolStripMenuItem.Text = ResourcesFile.MenuInit;
-            cerrarToolStripMenuItem.Text = ResourcesFile.MenuClose;
+            sesionToolStripMenuItem.Text = "Sesión"; //ResourcesFile.MenuSession;
+            iniciarToolStripMenuItem.Text = "Iniciar"; //ResourcesFile.MenuInit;
+            cerrarToolStripMenuItem.Text = "Cerrar"; //ResourcesFile.MenuClose;
         }
 
-        public void CargarMenuSegunPermisos()
+        public void CargarMenuSegunPerfil()
         {
             UserProfile Profile = SingletonSession.GetInstance.Perfil;
+
+            var menu = _menuController.TraerMenu();
+            var submenu = _menuController.TraerSubMenu();
+
+            foreach (var item in menu)
+            {
+                ToolStripMenuItem menuItem = new ToolStripMenuItem(item.Descripcion);
+                menuItem.Name = item.Descripcion;
+                foreach (var subItem in submenu)
+                {
+                    if (item.Id == subItem.MenuId)
+                    {
+                        ToolStripMenuItem subMenuItem = new ToolStripMenuItem(subItem.Descripcion);
+                        subMenuItem.Name = subItem.Descripcion;
+                        subMenuItem.Click += new EventHandler(Menu_Click);
+                        menuItem.DropDownItems.Add(subMenuItem);
+                    }
+                }
+
+                menuStrip1.Items.Add(menuItem);
+            }   
 
             if (Profile == UserProfile.DEFAULT)
             {
@@ -118,14 +138,7 @@ namespace OptimaBank
 
         public void ValidarFormulario()
         {
-            if (!SingletonSession.GetInstance.IsLogged())
-            {
-                tssMensaje.Text = ResourcesFile.NotLogger;
-            }
-            else
-            {
-                //tssMensaje.Text = ResourcesFile.NotLogger;
-            }
+            tssMensaje.Text = SingletonSession.GetInstance.IsLogged() ? string.Empty : ResourcesFile.NotLogger;
             PrepararMenuLogin();
         }
 
@@ -173,10 +186,10 @@ namespace OptimaBank
 
             //menuStrip1.Items.Add(Menu);
 
-            var fer = _data.Proteger("Palabras mas o menos");
+            //var fer = _data.Proteger("Palabras mas o menos");
 
 
-            var permiso = _usuPemiso.GetAllAsync();
+            //var permiso = _usuPemiso.GetAllAsync();
         }
 
         #endregion

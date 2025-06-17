@@ -9,6 +9,11 @@ using OptimaBank.ApplicationLogic.Interfaces;
 using OptimaBank.ApplicationLogic.PlazoFijo;
 using OptimaBank.UI;
 using OptimaBank.UI.Controllers;
+using OptimaBank.Services.Interfaces;
+using OptimaBank.Services.DataModel;
+using OptimaBank.ApplicationLogic.Menues;
+using OptimaBank.ApplicationLogic.Usuarios;
+using OptimaBank.SQLServerDataProvider.Usuarios;
 
 namespace OptimaBank
 {
@@ -36,37 +41,71 @@ namespace OptimaBank
 
         private static void ConfigureServices(ServiceCollection services)
         {
-            // PLAZO FIJO
-            services.AddScoped<IPlazoFijoRepository, PlazoFijoRepository>();
-            services.AddScoped<IPlazoFijoApplicationService, PlazoFijoApplicationService>();
-            services.AddScoped<PlazoFijoController>();
-            services.AddScoped<FrmPlazoFijo>();
+            services.AddScoped<FrmMain>();
 
-            services.AddScoped<FrmMain>()
-                .AddScoped<FrmLogin>()
+            // DATA MODEL SERVICIOS
+            services.AddScoped<IDataModelRepository, DataModelRepository>()
+                .AddScoped<IDataModelService, DataModelService>()
+                .AddScoped<PlazoFijoController>();
+
+            // USUARIO
+            services.AddScoped<FrmLogin>()
+                .AddScoped<UsuarioController>()
+                .AddScoped<IEncriptarApplicationService, EncriptarApplicationService>()
+                .AddScoped<ILoginAppService<Usuario>, LoginAppService>()
                 .AddScoped<IApplicationManager<Usuario>, ApplicationManager<Usuario>>()
-                .AddScoped<IApplicationManager<Telefono>, ApplicationManager<Telefono>>()
+                .AddScoped<IRepositoryManager<Usuario>, RepositoryManager<Usuario>>()
+                .AddScoped<IDbContext<Usuario>, DbContext<Usuario>>()
+                .AddScoped<IUsuarioApplicationService<Usuario>, UsuarioApplicationService>();
+                //.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+            // USUARIO-ROL
+            services.AddScoped<IUsuarioRolApplicationService<UsuarioRol>, UsuarioRolApplicationService>()
+                .AddScoped<IRepositoryManager<UsuarioRol>, RepositoryManager<UsuarioRol>>()
+                .AddScoped<IDbContext<UsuarioRol>, DbContext<UsuarioRol>>()
+                .AddScoped<IUsuarioDbContext, UsuarioDbContext>();
+
+            // MENU
+            services.AddScoped<MenuController>()
+                .AddScoped<IMenuApplicationService<Menu>, MenuApplicationService>()
+                .AddScoped<IApplicationManager<Menu>, ApplicationManager<Menu>>()
+                .AddScoped<IRepositoryManager<Menu>, RepositoryManager<Menu>>()
+                .AddScoped<IDbContext<Menu>, DbContext<Menu>>();
+
+            // SUBMENU
+            services.AddScoped<ISubMenuApplicationService<Submenu>, SubMenuApplicationService>()
+                .AddScoped<IApplicationManager<Submenu>, ApplicationManager<Submenu>>()
+                .AddScoped<IRepositoryManager<Submenu>, RepositoryManager<Submenu>>()
+                .AddScoped<IDbContext<Submenu>, DbContext<Submenu>>();
+
+            // PLAZO FIJO
+            services.AddScoped<FrmPlazoFijo>()
+                .AddScoped<PlazoFijoController>()
+                .AddScoped<IPlazoFijoRepository, PlazoFijoRepository>()
+                .AddScoped<IPlazoFijoApplicationService, PlazoFijoApplicationService>();
+                
+            services.AddScoped<IApplicationManager<Telefono>, ApplicationManager<Telefono>>()
                 .AddScoped<IApplicationManager<Componente>, ApplicationManager<Componente>>()
-                .AddScoped<IApplicationManager<UsuarioPermiso>, ApplicationManager<UsuarioPermiso>>()
+                .AddScoped<IApplicationManager<UsuarioRol>, ApplicationManager<UsuarioRol>>()
                 .AddScoped<IApplicationManager<Permiso>, ApplicationManager<Permiso>>()
 
-                .AddScoped<IRepositoryManager<Usuario>, RepositoryManager<Usuario>>()
+                
                 .AddScoped<IRepositoryManager<Telefono>, RepositoryManager<Telefono>>()
                 .AddScoped<IRepositoryManager<Componente>, RepositoryManager<Componente>>()
                 .AddScoped<IRepositoryManager<Permiso>, RepositoryManager<Permiso>>()
-                .AddScoped<IRepositoryManager<UsuarioPermiso>, RepositoryManager<UsuarioPermiso>>()
-
+                .AddScoped<IRepositoryManager<UsuarioRol>, RepositoryManager<UsuarioRol>>()
+                
                 .AddScoped<IDbContext<Usuario>, DbContext<Usuario>>()
                 .AddScoped<IDbContext<Telefono>, DbContext<Telefono>>()
                 .AddScoped<IDbContext<Componente>, DbContext<Componente>>()
                 .AddScoped<IDbContext<Permiso>, DbContext<Permiso>>()
-                .AddScoped<IDbContext<UsuarioPermiso>, DbContext<UsuarioPermiso>>()
+                .AddScoped<IDbContext<UsuarioRol>, DbContext<UsuarioRol>>()
 
                 .AddScoped<IUsuarioDbContext, UsuarioDbContext>()
 
                 .AddScoped<IDataProtectorApp, DataProtectorAppService>()
 
-                .AddScoped(typeof(IEncriptarAppService), typeof(EncriptarAppService))
+                .AddScoped(typeof(IEncriptarApplicationService), typeof(EncriptarApplicationService))
                 .AddScoped(typeof(ILoginAppService<Usuario>), typeof(LoginAppService))
                 .AddScoped(typeof(IUsuarioRepository), typeof(UsuarioRepository));
 

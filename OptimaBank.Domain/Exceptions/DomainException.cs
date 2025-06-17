@@ -1,0 +1,34 @@
+﻿
+namespace OptimaBank.Domain.Exceptions
+{
+    public class DomainException : Exception
+    {
+        public string ErrorCode { get; }
+
+        public DomainException(string message, string errorCode = null)
+            : base(message)
+        {
+            ErrorCode = errorCode;
+        }
+
+        public DomainException(string message, Exception innerException, string errorCode = null)
+            : base(message, innerException)
+        {
+            ErrorCode = errorCode;
+        }
+    }
+
+    public class ValidationException : DomainException
+    {
+        public ValidationException(string message) : base(message, "VAL001")
+        {
+        }
+    }
+
+    public class BusinessRuleException : DomainException
+    {
+        public BusinessRuleException(string message) : base(message, "BUS001")
+        {
+        }
+    }
+}
