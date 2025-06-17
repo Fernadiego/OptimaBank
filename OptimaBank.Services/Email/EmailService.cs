@@ -19,7 +19,7 @@ namespace OptimaBank.Services.Email
             _smtpPort = smtpPort;
         }
 
-        public void EnviarNuevaContrasena()
+        public async Task EnviarNuevaContrasena()
         {
             try
             {
@@ -64,7 +64,7 @@ namespace OptimaBank.Services.Email
                     //    scope.Complete();
                     //}
 
-                    return Result<string>.Success("Contraseña enviada correctamente");
+                    //Result<string>.Success("Contraseña enviada correctamente");
                 }
             }
             catch (SmtpException ex)
