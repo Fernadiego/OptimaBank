@@ -30,5 +30,6 @@ namespace OptimaBank.Domain
 
         public int CantidadIntentos { get; set; }
 
+        public bool Habilitado { get; set; }
     }
 }
