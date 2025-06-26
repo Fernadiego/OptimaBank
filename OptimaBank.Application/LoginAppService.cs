@@ -1,10 +1,12 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
 using OptimaBank.Abstractions;
 using OptimaBank.ApplicationLogic.Interfaces;
+using OptimaBank.ApplicationLogic.MultipleLanguage;
 using OptimaBank.Domain;
 using OptimaBank.Repository;
 using OptimaBank.Repository.Interfaces;
 using OptimaBank.Services;
+using OptimaBank.Services.MultipleLanguage;
 
 namespace OptimaBank.ApplicationLogic
 {
@@ -18,15 +20,17 @@ namespace OptimaBank.ApplicationLogic
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IRepositoryManager<Usuario> _usuarioRepositoryManager;
         private readonly IEncriptarApplicationService _encriptarAppService;
+        private readonly IRepositoryManager<Idioma> _idiomaRepositoryManager;
 
         //IRepositoryManager<Permiso> _permiso;
         //IRepositoryManager<UsuarioPermiso> _usuPermiso;
 
-        public LoginAppService(IUsuarioRepository usuarioRepository, IRepositoryManager<Usuario> usuarioRepositoryManager, IEncriptarApplicationService encriptarAppService)
+        public LoginAppService(IUsuarioRepository usuarioRepository, IRepositoryManager<Usuario> usuarioRepositoryManager, IEncriptarApplicationService encriptarAppService, IRepositoryManager<Idioma> idiomaRepositoryManager)
         {
             _usuarioRepository = usuarioRepository;
             _usuarioRepositoryManager = usuarioRepositoryManager;
             _encriptarAppService = encriptarAppService;
+            _idiomaRepositoryManager = idiomaRepositoryManager;
         }
 
         public LoginResult Login(Usuario Credenciales)
@@ -50,10 +54,14 @@ namespace OptimaBank.ApplicationLogic
                         if (user.Activo)
                         {
                             //var perfil = AppHelper.GetEnumUserProfileByString(GetProfileUser(patentes));
-                            SingletonSession.GetInstance.Init((IUsuario)user, UserProfile.ADMINISTRADOR);
+                            
+                            SingletonSession.GetInstance.Init((
+                                IUsuario)user, 
+                                UserProfile.ADMINISTRADOR,
+                                _idiomaRepositoryManager.GetById(user.IdiomaId));
+
                             UpdateValidatedUser(user);
                             return LoginResult.ValidUser;
-
                         }
                         else
                             return LoginResult.UserDisabled;
@@ -76,7 +84,7 @@ namespace OptimaBank.ApplicationLogic
 
         public void Logout()
         {
-            SingletonSession.GetInstance.Close();
+            SingletonSession.Close();
         }
 
         private void UpdateValidatedUser(Usuario user)

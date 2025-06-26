@@ -13,7 +13,15 @@ using OptimaBank.Services.Interfaces;
 using OptimaBank.Services.DataModel;
 using OptimaBank.ApplicationLogic.Menues;
 using OptimaBank.ApplicationLogic.Usuarios;
+using OptimaBank.ApplicationLogic.MultipleLanguage;
 using OptimaBank.SQLServerDataProvider.Usuarios;
+using OptimaBank.SQLServerDataProvider.Idiomas;
+using OptimaBank.Services.MultipleLanguage;
+using OptimaBank.ApplicationLogic.Idiomas;
+using OptimaBank.ApplicationLogic.Bitacoras;
+using OptimaBank.ApplicationLogic.Composite;
+using OptimaBank.SQLServerDataProvider.Composite;
+using OptimaBank.SQLServerDataProvider.Composite.Interfaces;
 
 namespace OptimaBank
 {
@@ -42,6 +50,35 @@ namespace OptimaBank
         private static void ConfigureServices(ServiceCollection services)
         {
             services.AddScoped<FrmMain>();
+
+            // COMPOSITE
+            services.AddScoped<IFamiliaApplicationService<Familia>, FamiliaApplicationService>()
+                .AddScoped<IFamiliaRepository, FamiliaRepository>()
+                .AddScoped<IFamiliaDbContext, FamiliaDbContext>()
+                .AddScoped<CompositeController>();
+            services.AddScoped<IPatenteApplicationService<Patente>, PatenteApplicationService>()
+                .AddScoped<IPatenteRepository, PatenteRepository>()
+                .AddScoped<IPatenteDbContext, PatenteDbContext>();
+
+            // IDIOMA
+            services.AddScoped<IdiomaController>()
+                .AddScoped<IRepositoryManager<Idioma>, RepositoryManager<Idioma>>()
+                .AddScoped<IDbContext<Idioma>, DbContext<Idioma>>()
+                .AddScoped<IIdiomaDbContext, IdiomaDbContext>()
+                .AddScoped<IIdiomaRepository, IdiomaRepository>()
+                .AddScoped<IIdiomaAplicationService<Idioma>, IdiomaApplicationService>()
+                .AddScoped<ITraductorService, TraductorApplicationService>();
+
+            // ETIQUETA
+            services.AddScoped<IEtiquetaAplicationService<Etiqueta>, EtiquetaApplicationService>()
+                .AddScoped<IRepositoryManager<Etiqueta>, RepositoryManager<Etiqueta>>()
+                .AddScoped<IDbContext<Etiqueta>, DbContext<Etiqueta>>();
+
+            // BITACORA
+            services.AddScoped<IBitacoraApplicationService<Bitacora>, BitacoraApplicationService>()
+                .AddScoped<IRepositoryManager<Bitacora>, RepositoryManager<Bitacora>>()
+                .AddScoped<IDbContext<Bitacora>, DbContext<Bitacora>>()
+                .AddScoped<BitacoraController>();
 
             // DATA MODEL SERVICIOS
             services.AddScoped<IDataModelRepository, DataModelRepository>()

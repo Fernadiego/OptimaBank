@@ -26,6 +26,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Properties\Recursos.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Recursos.resx</DependentUpon>
+    </Compile>
     <Compile Update="ResourcesFile.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -34,6 +39,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Properties\Recursos.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Recursos.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Update="ResourcesFile.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourcesFile.Designer.cs</LastGenOutput>

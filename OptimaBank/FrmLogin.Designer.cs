@@ -35,11 +35,11 @@
             txtPassword = new TextBox();
             lblPass = new Label();
             BtnCancelar = new Button();
-            panel1 = new Panel();
+            panelLateral = new Panel();
             btnOlvidePass = new Button();
             btnRegistrarse = new Button();
             pictureBox1 = new PictureBox();
-            panel1.SuspendLayout();
+            panelLateral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -53,6 +53,7 @@
             btnAceptar.Name = "btnAceptar";
             btnAceptar.Size = new Size(129, 40);
             btnAceptar.TabIndex = 0;
+            btnAceptar.Tag = "LABEL_BTN_ACEPTAR";
             btnAceptar.Text = "Aceptar";
             btnAceptar.UseVisualStyleBackColor = false;
             btnAceptar.Click += btnAceptar_Click;
@@ -66,6 +67,7 @@
             lblUser.Name = "lblUser";
             lblUser.Size = new Size(82, 25);
             lblUser.TabIndex = 1;
+            lblUser.Tag = "LABEL_USER";
             lblUser.Text = "Usuario:";
             // 
             // txtUsuario
@@ -98,6 +100,7 @@
             lblPass.Name = "lblPass";
             lblPass.Size = new Size(97, 25);
             lblPass.TabIndex = 4;
+            lblPass.Tag = "LABEL_PASS";
             lblPass.Text = "Password:";
             // 
             // BtnCancelar
@@ -110,22 +113,23 @@
             BtnCancelar.Name = "BtnCancelar";
             BtnCancelar.Size = new Size(129, 40);
             BtnCancelar.TabIndex = 5;
+            BtnCancelar.Tag = "LABEL_BTN_CANCELAR";
             BtnCancelar.Text = "Cancelar";
             BtnCancelar.UseVisualStyleBackColor = false;
             BtnCancelar.Click += BtnCancelar_Click;
             // 
-            // panel1
+            // panelLateral
             // 
-            panel1.BackColor = Color.RoyalBlue;
-            panel1.Controls.Add(btnOlvidePass);
-            panel1.Controls.Add(btnRegistrarse);
-            panel1.Controls.Add(pictureBox1);
-            panel1.Dock = DockStyle.Left;
-            panel1.Location = new Point(0, 0);
-            panel1.Margin = new Padding(3, 2, 3, 2);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(195, 182);
-            panel1.TabIndex = 6;
+            panelLateral.BackColor = Color.RoyalBlue;
+            panelLateral.Controls.Add(btnOlvidePass);
+            panelLateral.Controls.Add(btnRegistrarse);
+            panelLateral.Controls.Add(pictureBox1);
+            panelLateral.Dock = DockStyle.Left;
+            panelLateral.Location = new Point(0, 0);
+            panelLateral.Margin = new Padding(3, 2, 3, 2);
+            panelLateral.Name = "panelLateral";
+            panelLateral.Size = new Size(195, 182);
+            panelLateral.TabIndex = 6;
             // 
             // btnOlvidePass
             // 
@@ -136,6 +140,7 @@
             btnOlvidePass.Name = "btnOlvidePass";
             btnOlvidePass.Size = new Size(90, 31);
             btnOlvidePass.TabIndex = 8;
+            btnOlvidePass.Tag = "LABEL_BTN_OLVIDE";
             btnOlvidePass.Text = "Olvidé Password";
             btnOlvidePass.UseVisualStyleBackColor = false;
             // 
@@ -148,6 +153,7 @@
             btnRegistrarse.Name = "btnRegistrarse";
             btnRegistrarse.Size = new Size(90, 31);
             btnRegistrarse.TabIndex = 7;
+            btnRegistrarse.Tag = "LABEL_BTN_REGISTRAR";
             btnRegistrarse.Text = "Registrarse";
             btnRegistrarse.UseVisualStyleBackColor = false;
             btnRegistrarse.Click += btnRegistrarse_Click;
@@ -170,7 +176,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = BtnCancelar;
             ClientSize = new Size(525, 182);
-            Controls.Add(panel1);
+            Controls.Add(panelLateral);
             Controls.Add(BtnCancelar);
             Controls.Add(lblPass);
             Controls.Add(txtPassword);
@@ -185,9 +191,11 @@
             Name = "FrmLogin";
             Opacity = 0.5D;
             StartPosition = FormStartPosition.CenterScreen;
+            Tag = "LABEL_LOGIN_TITULO";
             Text = "Login Optima Bank";
+            FormClosing += FrmLogin_FormClosing;
             Load += FrmLogin_Load;
-            panel1.ResumeLayout(false);
+            panelLateral.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -201,7 +209,7 @@
         private TextBox txtPassword;
         private Label lblPass;
         private Button BtnCancelar;
-        private Panel panel1;
+        private Panel panelLateral;
         private PictureBox pictureBox1;
         private Button btnOlvidePass;
         private Button btnRegistrarse;

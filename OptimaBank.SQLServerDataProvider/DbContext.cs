@@ -1,7 +1,5 @@
 ﻿using OptimaBank.Domain;
-using OptimaBank.Services;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
 using System.Transactions;
@@ -17,70 +15,6 @@ namespace OptimaBank.SQLServerDataProvider
         {
 
         }
-
-        //public T GetUserByCredentials(string user, string password)
-        //{
-        //    IList<T> lista = new List<T>();
-        //    try 
-        //    {
-        //        acceso.Abrir();
-        //        SqlParameter userParams = acceso.CrearParametro("@USUARIO", user);
-        //        SqlParameter passParams = acceso.CrearParametro("@CONTRASENA", password);
-        //        SqlParameter[] parametros = new SqlParameter[2];
-        //        parametros[0] = userParams;
-        //        parametros[1] = passParams;
-
-        //        lista = acceso.ExecuteSP("SP_USUARIO_BY_CRED", CommandType.StoredProcedure, parametros);
-        //        acceso.Cerrar();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        acceso.Cerrar();
-        //        throw;
-        //    }
-
-        //    return lista.FirstOrDefault();
-        //}
-
-        //public T GetUserByCredentials(string user, string password)
-        //{
-        //    if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(password))
-        //    {
-        //        throw new ArgumentException("Usuario y contraseña son requeridos");
-        //    }
-
-        //    try
-        //    {
-        //        using (var scope = new TransactionScope(TransactionScopeOption.Required,
-        //            new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
-        //        {
-        //            var parametros = new[]
-        //            {
-        //                new SqlParameter("@USUARIO", SqlDbType.VarChar, 50) { Value = user },
-        //                new SqlParameter("@CONTRASENA", SqlDbType.VarChar, 80) { Value = password }
-        //            };
-
-        //            var resultado = acceso.ExecuteSP("SP_USUARIO_BY_CRED",
-        //                CommandType.StoredProcedure,
-        //                parametros)
-        //                .FirstOrDefault();
-
-        //            scope.Complete();
-                    
-        //            return Result<IList<T>>.Success(resultado);
-        //        }
-        //    }
-        //    catch (SqlException ex)
-        //    {
-        //        //_logger.LogError($"Error de base de datos al validar credenciales: {ex.Message}");
-        //        throw new DataAccessException("Error al validar credenciales", ex);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //_logger.LogError($"Error inesperado al validar credenciales: {ex.Message}");
-        //        throw new DataAccessException("Error inesperado al validar credenciales", ex);
-        //    }
-        //}
 
         public IList<T> GetAll()
         {
@@ -174,24 +108,6 @@ namespace OptimaBank.SQLServerDataProvider
 
             //return lista == 1 ? true : false;
         }
-
-        //public T SaveAs(T entity)
-        //{
-        //    IList<T> lista = new List<T>();
-        //    try
-        //    {
-        //        _acceso.Abrir();
-        //        DataTable resp = _acceso.CallProcedure(entity, TypeOperation.ALTA);
-        //        _acceso.Cerrar();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _acceso.Cerrar();
-        //        throw;
-        //    }
-
-        //    return lista.FirstOrDefault();
-        //}
 
         public T Insert(T entity)
         {
@@ -287,6 +203,28 @@ namespace OptimaBank.SQLServerDataProvider
                 scope.Complete();
 
                 return entity;
+            }
+        }
+
+        public void Delete(int id)
+        {
+            using (var scope = new TransactionScope(TransactionScopeOption.Required,
+                new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted }))
+            {
+                _acceso.Abrir();
+                string tableName = typeof(T).Name;
+                string idField = "Id";
+
+                string deleteQuery = $"DELETE FROM {tableName} WHERE {idField} = @{idField}";
+
+                using (var command = new SqlCommand(deleteQuery, _acceso.connection))
+                {
+                    command.Parameters.AddWithValue($"@{idField}", id);
+                    command.ExecuteNonQuery();
+                }
+
+                _acceso.Cerrar();
+                scope.Complete();
             }
         }
     }

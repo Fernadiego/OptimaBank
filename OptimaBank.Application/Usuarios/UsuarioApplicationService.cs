@@ -10,6 +10,7 @@ namespace OptimaBank.ApplicationLogic.Usuarios
     {
         bool ValidarExistencia(string NombreUsuario);
         Usuario CrearUsuario(T usuario);
+        IList<Usuario> ListarUsuarios();
     }
 
     public class UsuarioApplicationService : IUsuarioApplicationService<Usuario>
@@ -41,6 +42,10 @@ namespace OptimaBank.ApplicationLogic.Usuarios
             usuario.Email = email;
 
             return _usuarioRepositoryManager.Insert(usuario);
+        }
+        public IList<Usuario> ListarUsuarios()
+        {
+            return _usuarioRepositoryManager.GetAll();
         }
     }
 }

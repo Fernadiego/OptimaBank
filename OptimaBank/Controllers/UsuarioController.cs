@@ -67,5 +67,10 @@ namespace OptimaBank.UI.Controllers
             MessageBox.Show("Usuario Creado Exitosamente.", "Alta de Usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
             return true;
         }
+
+        public IList<Usuario> Listar()
+        {
+            return _usuarioApplicationService.ListarUsuarios();
+        }
     }
 }

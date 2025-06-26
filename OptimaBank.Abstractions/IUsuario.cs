@@ -18,5 +18,6 @@ namespace OptimaBank.Abstractions
         public DateTime? FechaModificacion { get; set; }
         public DateTime? UltimoAcceso { get; set; }
         public bool Activo { get; set; }
+        public int IdiomaId { get; set; }
     }
 }
