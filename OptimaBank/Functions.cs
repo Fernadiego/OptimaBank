@@ -48,5 +48,88 @@ namespace OptimaBank.UI
             }
             return true;
         }
+
+        public static Dictionary<string, string> GetTraduccionByLabels(Dictionary<string, string> traducciones, List<string> labels)
+        {
+            return traducciones
+                .Where(x => labels.Contains(x.Key))
+                .ToDictionary<string, string>();
+        }
+
+        public static void InicializarHeader(Dictionary<string, string> traducciones, Form form)
+        {
+            traducciones.TryGetValue(form.Tag.ToString(), out string traduccion);
+            form.Text = !string.IsNullOrEmpty(traduccion)
+                ? traduccion
+                : "Optima Bank - Form(E)";
+        }
+
+        public static void AplicarTraduction(Control.ControlCollection controles, Dictionary<string, string> traducciones)
+        {
+            var controlesOrderByTabIndex = controles.Cast<Control>()
+              .OrderBy(c => c.TabIndex)
+              .Where(c => c is Panel || c is Button || c is Label || c is TextBox || c is ComboBox || c is DateTimePicker || c is MaskedTextBox)
+              .ToList();
+
+            foreach (Control control in controlesOrderByTabIndex)
+            {
+
+                if (control is Panel panel)
+                {
+                    foreach (Control childControl in panel.Controls)
+                    {
+                        if (childControl.Tag != null && childControl.Tag is string etiqueta1)
+                        {
+                            if (traducciones.ContainsKey(etiqueta1))
+                            {
+                                childControl.Text = traducciones[etiqueta1];
+                            }
+                            else
+                            {
+                                childControl.Text = etiqueta1;
+                            }
+                        }
+                    }
+                }
+
+                if (control.Tag != null && control.Tag is string etiqueta)
+                {
+                    if (traducciones.ContainsKey(etiqueta))
+                    {
+                        control.Text = traducciones[etiqueta];
+                    }
+                    else
+                    {
+                        control.Text = etiqueta;
+                    }
+                }
+                //if (control is TextBox textbox)
+                //{
+
+                //}
+                //else if (control is ComboBox combobox)
+                //{
+
+                //}
+                //else if (control is MaskedTextBox maskedTextBox)
+                //{
+
+                //}
+                //else if(control is Label)
+                //{
+                //    if (control.Tag != null && control.Tag is string etiqueta)
+                //    {
+                //        if (traducciones.ContainsKey(etiqueta))
+                //        {
+                //            control.Text = traducciones[etiqueta];
+                //        }
+                //        else
+                //        {
+                //            control.Text = etiqueta;
+                //        }
+                //    }
+                //}
+            }
+        }
     }
 }

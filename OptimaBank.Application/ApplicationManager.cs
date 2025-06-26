@@ -35,5 +35,10 @@ namespace OptimaBank.ApplicationLogic
         {
             return _repository.Update(entity);
         }
+
+        public void Delete(int id)
+        {
+            _repository.Delete(id);
+        }
     }
 }

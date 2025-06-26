@@ -2,6 +2,14 @@
 {
     public abstract class Componente
     {
+        private int _id;
+
+        public int Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
         private string _nombre;
 
         public string Nombre

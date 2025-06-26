@@ -13,6 +13,14 @@ namespace OptimaBank.Services
             set { _usuario = value; }
         }
 
+        private Idioma _idioma;
+
+        public Idioma Idioma
+        {
+            get { return _idioma; }
+            set { _idioma = value; }
+        }
+
         private DateTime _ultimoAcceso;
 
         public DateTime UltimoAcceso
@@ -37,16 +45,12 @@ namespace OptimaBank.Services
             set { _patentes = value; }
         }
 
-        public void Init(IUsuario usuario, UserProfile perfil)
+        public void Init(IUsuario usuario, UserProfile perfil, Idioma idioma)
         {
             _usuario = usuario;
             _ultimoAcceso = DateTime.Now;
             _perfil = perfil;
-        }
-
-        public void Close()
-        {
-            _usuario = null;
+            _idioma = idioma;
         }
 
         public bool IsLogged()

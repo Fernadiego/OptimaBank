@@ -40,5 +40,10 @@ namespace OptimaBank.Repository
         {
             return _context.Update(entity);
         }
+
+        public void Delete(int id)
+        {
+           _context.Delete(id);
+        }
     }
 }

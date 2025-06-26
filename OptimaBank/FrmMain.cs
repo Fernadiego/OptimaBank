@@ -1,46 +1,72 @@
+using OptimaBank.Domain;
 using OptimaBank.Services;
+using OptimaBank.Services.MultipleLanguage;
+using OptimaBank.UI;
 using OptimaBank.UI.Controllers;
+using System.Drawing.Design;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OptimaBank
 {
-    public partial class FrmMain : Form
+    public partial class FrmMain : Form, IIdiomaObserver
     {
         private readonly UsuarioController _usuarioController;
         private readonly MenuController _menuController;
+        private readonly IdiomaController _idiomaController;
+        private readonly BitacoraController _bitacoraController;
+        private readonly CompositeController _compositeController;
+        private readonly ITraductorService _traductorService;
 
         //IApplicationManager<Usuario> _app;
         //IDataProtectorApp _data;
         //IApplicationManager<Componente> _patenteApp;
         //IApplicationManager<UsuarioPermiso> _usuPemiso;
 
-        public FrmMain(UsuarioController usuarioController, MenuController menuController)
-            //IApplicationManager<Usuario> app,
-            //IApplicationManager<Componente> patenteApp,
-            //IDataProtectorApp data, IApplicationManager<UsuarioPermiso> usuPemiso)
+        public FrmMain(UsuarioController usuarioController, MenuController menuController, IdiomaController idiomaController, BitacoraController bitacoraController, CompositeController compositeController, ITraductorService traductorService)
+        //IApplicationManager<Usuario> app,
+        //IApplicationManager<Componente> patenteApp,
+        //IDataProtectorApp data, IApplicationManager<UsuarioPermiso> usuPemiso)
         {
             _usuarioController = usuarioController;
             _menuController = menuController;
-
+            _idiomaController = idiomaController;
+            _bitacoraController = bitacoraController;
+            _traductorService = traductorService;
+            _compositeController = compositeController;
             InitializeComponent();
+            TraducirFormulario();
+                        
+
+
             ValidarFormulario();
             //_app = app;
             //_patenteApp = patenteApp;
             //_data = data;
             //_usuPemiso = usuPemiso;
             //ValidarForm();
+            
             PrepareMenuVer();
+            
         }
 
         #region Eventos
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
-            InicializarMenu();
+            SingletonSession.SuscribeObserver(this);
+        }
+
+        private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SingletonSession.UsubscribeObserver(this);
         }
 
         private void iniciarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FrmLogin login = new FrmLogin(_usuarioController);
+            FrmLogin login = new FrmLogin(_usuarioController, _idiomaController, _traductorService);
             login.MdiParent = this;
             login.StartPosition = FormStartPosition.Manual;
             login.Location = new Point((Screen.PrimaryScreen.Bounds.Width - login.Width) / 2, 100);
@@ -49,7 +75,7 @@ namespace OptimaBank
 
         private void cerrarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SingletonSession.GetInstance.Close();
+            SingletonSession.Close();
             ValidarFormulario();
         }
 
@@ -60,12 +86,38 @@ namespace OptimaBank
 
             switch (menuText)
             {
-                case "Caja de Ahorro":
+                case "Idiomas":
                     MessageBox.Show("HACIENDO COSAS DE ADMINISTRADOR EN CA");
+                    FrmIdioma login = new FrmIdioma(_idiomaController, _bitacoraController);
+                    login.MdiParent = this;
+                    login.StartPosition = FormStartPosition.Manual;
+                    login.Location = new Point((Screen.PrimaryScreen.Bounds.Width - login.Width) / 2, 100);
+                    login.Show();
                     break;
 
-                case "Cuenta":
+                case "Etiquetas":
                     MessageBox.Show("HACIENDO COSAS DE ADMINISTRADOR CC");
+                    FrmEtiquetasTraducciones fer = new FrmEtiquetasTraducciones(_idiomaController);
+                    fer.MdiParent = this;
+                    fer.StartPosition = FormStartPosition.Manual;
+                    fer.Location = new Point((Screen.PrimaryScreen.Bounds.Width - fer.Width) / 2, 100);
+                    fer.Show();
+                    break;
+
+                case "Usuarios":
+                    FrmUsuario formUsuario = new FrmUsuario(_usuarioController, _compositeController);
+                    formUsuario.MdiParent = this;
+                    formUsuario.StartPosition = FormStartPosition.Manual;
+                    formUsuario.Location = new Point((Screen.PrimaryScreen.Bounds.Width - formUsuario.Width) / 2, 100);
+                    formUsuario.Show();
+                    break;
+
+                case "PatentesFamilias":
+                    FrmPatentesFamilias formPatentesFamilias = new FrmPatentesFamilias();
+                    formPatentesFamilias.MdiParent = this;
+                    formPatentesFamilias.StartPosition = FormStartPosition.Manual;
+                    formPatentesFamilias.Location = new Point((Screen.PrimaryScreen.Bounds.Width - formPatentesFamilias.Width) / 2, 100);
+                    formPatentesFamilias.Show();
                     break;
 
                 default:
@@ -79,12 +131,85 @@ namespace OptimaBank
 
         #region Propiedades
 
-        private ToolStripLabel lblUsuario;
-        private void InicializarMenu()
+        private void InicializarMenu(Dictionary<string, string> traducciones)
         {
-            sesionToolStripMenuItem.Text = "Sesión"; //ResourcesFile.MenuSession;
-            iniciarToolStripMenuItem.Text = "Iniciar"; //ResourcesFile.MenuInit;
-            cerrarToolStripMenuItem.Text = "Cerrar"; //ResourcesFile.MenuClose;
+            foreach (Control control in this.Controls)
+            {
+                if (control is MenuStrip menuStrip)
+                {
+                    foreach (ToolStripMenuItem menuItem in menuStrip.Items)
+                    {
+                        menuItem.Text = menuItem.Tag != null && traducciones.ContainsKey(menuItem.Tag.ToString())
+                            ? menuItem.Text = traducciones[menuItem.Tag.ToString()]
+                            : menuItem.Text = "MenuItem(E)";
+                        foreach (ToolStripMenuItem subItem in menuItem.DropDownItems.OfType<ToolStripMenuItem>())
+                        {
+                            subItem.Text = subItem.Tag != null && traducciones.ContainsKey(subItem.Tag.ToString())
+                           ? subItem.Text = traducciones[subItem.Tag.ToString()]
+                           : subItem.Text = "SubMenuItem(E)";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void CargarMenuIdiomas(Idioma lenguaje)
+        {
+            if (lenguaje != null && string.IsNullOrEmpty(lenguaje.Imagen))
+            {
+                lenguaje = _idiomaController.ObtenerIdiomaById(lenguaje.Id);
+            }
+
+            var idiomas = _idiomaController.ObtenerIdiomas();
+            var idiomaSeleccionado = lenguaje ?? _idiomaController.ObtenerIdiomaDefault();
+
+            toolStripDropDownButton.DropDownItems.Clear();
+
+            var imagenMap = new Dictionary<string, (byte[] normal, byte[] check)>
+            {
+                ["ARG"] = (UI.Properties.Recursos.ARG,        UI.Properties.Recursos.ARG_CHECK),
+                ["BRA"] = (UI.Properties.Recursos.BRA,        UI.Properties.Recursos.BRA_CHECK),
+                ["UK"] = (UI.Properties.Recursos.UK,          UI.Properties.Recursos.UK_CHECK),
+                ["HK"] = (UI.Properties.Recursos.HK,          UI.Properties.Recursos.HK_CHECK)
+            };
+            
+            foreach (var idioma in idiomas)
+            {
+                var item = new ToolStripMenuItem(idioma.Descripcion)
+                {
+                    Tag = idioma.Id
+                };
+
+                var esSeleccionado = idiomaSeleccionado.Imagen == idioma.Imagen;
+                var imagenRecurso = imagenMap.GetValueOrDefault(idioma.Imagen, imagenMap["HK"]);
+                var imagenFinal = esSeleccionado ? imagenRecurso.check : imagenRecurso.normal;
+
+                item.Image = GetImagen(imagenFinal);
+                item.Enabled = !esSeleccionado;
+
+                var idiomaId = idioma.Id;
+                item.Click += (s, e) => SeleccionarIdioma(idiomaId);
+                toolStripDropDownButton.DropDownItems.Add(item);
+            }
+        }
+
+        private Image GetImagen(byte[] imagen)
+        {
+            using (var ms = new MemoryStream(imagen))
+            {
+                return Image.FromStream(ms);
+            }
+        }
+
+        private void InicializarFooter(Dictionary<string,string> traducciones)
+        {
+            traducciones.TryGetValue(LABEL.LABEL_NOT_LOGGER.ToString(), out string label);
+            EscribirConsola(label);
+        }
+
+        private void SeleccionarIdioma(int idiomaId)
+        {
+            SingletonSession.ChangeLanguage(new Idioma() { Id = idiomaId });
         }
 
         public void CargarMenuSegunPerfil()
@@ -122,14 +247,22 @@ namespace OptimaBank
             {
                 ToolStripMenuItem Menu = new ToolStripMenuItem("Administracion");
 
-                ToolStripMenuItem subSubItem = new ToolStripMenuItem("Caja de Ahorro");
+                ToolStripMenuItem subSubItem = new ToolStripMenuItem("Idiomas");
                 subSubItem.Click += new EventHandler(Menu_Click);
-                ToolStripMenuItem subSubItem2 = new ToolStripMenuItem("Cuenta Corriente");
 
+                ToolStripMenuItem subSubItem2 = new ToolStripMenuItem("Etiquetas");
                 subSubItem2.Click += new EventHandler(Menu_Click);
+
+                ToolStripMenuItem subSubItem3 = new ToolStripMenuItem("Usuarios");
+                subSubItem3.Click += new EventHandler(Menu_Click);
+
+                ToolStripMenuItem subSubItem4 = new ToolStripMenuItem("PatentesFamilias");
+                subSubItem4.Click += new EventHandler(Menu_Click);
 
                 Menu.DropDownItems.Add(subSubItem);
                 Menu.DropDownItems.Add(subSubItem2);
+                Menu.DropDownItems.Add(subSubItem3);
+                Menu.DropDownItems.Add(subSubItem4);
 
                 menuStrip1.Items.Add(Menu);
                 return;
@@ -192,6 +325,19 @@ namespace OptimaBank
             //var permiso = _usuPemiso.GetAllAsync();
         }
 
+        public void UpdatedLanguage(Idioma idioma)
+        {
+            TraducirFormulario(idioma);
+        }
+
+        private void TraducirFormulario(Idioma idioma = null)
+        {
+            var traducciones = _idiomaController.ObtenerTraducciones(idioma);
+            Functions.InicializarHeader(traducciones, this);
+            InicializarMenu(traducciones);
+            CargarMenuIdiomas(idioma);
+            InicializarFooter(traducciones);
+        }
         #endregion
     }
 }

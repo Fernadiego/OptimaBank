@@ -35,7 +35,7 @@ namespace OptimaBank
             iniciarToolStripMenuItem = new ToolStripMenuItem();
             cerrarToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
-            toolStripDropDownButton1 = new ToolStripDropDownButton();
+            toolStripDropDownButton = new ToolStripDropDownButton();
             francesToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             inglesToolStripMenuItem = new ToolStripMenuItem();
@@ -60,12 +60,14 @@ namespace OptimaBank
             sesionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { iniciarToolStripMenuItem, cerrarToolStripMenuItem });
             sesionToolStripMenuItem.Name = "sesionToolStripMenuItem";
             sesionToolStripMenuItem.Size = new Size(53, 20);
-            sesionToolStripMenuItem.Text = "Sesion";
+            sesionToolStripMenuItem.Tag = "MENU_SESSION";
+            sesionToolStripMenuItem.Text = "Sesión";
             // 
             // iniciarToolStripMenuItem
             // 
             iniciarToolStripMenuItem.Name = "iniciarToolStripMenuItem";
             iniciarToolStripMenuItem.Size = new Size(106, 22);
+            iniciarToolStripMenuItem.Tag = "MENU_INICIAR";
             iniciarToolStripMenuItem.Text = "Iniciar";
             iniciarToolStripMenuItem.Click += iniciarToolStripMenuItem_Click;
             // 
@@ -73,27 +75,28 @@ namespace OptimaBank
             // 
             cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
             cerrarToolStripMenuItem.Size = new Size(106, 22);
+            cerrarToolStripMenuItem.Tag = "MENU_CERRAR";
             cerrarToolStripMenuItem.Text = "Cerrar";
             cerrarToolStripMenuItem.Click += cerrarToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton1, tssMensaje });
+            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripDropDownButton, tssMensaje });
             statusStrip1.Location = new Point(0, 428);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(800, 22);
             statusStrip1.TabIndex = 3;
             statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripDropDownButton1
+            // toolStripDropDownButton
             // 
-            toolStripDropDownButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            toolStripDropDownButton1.DropDownItems.AddRange(new ToolStripItem[] { francesToolStripMenuItem, toolStripSeparator1, inglesToolStripMenuItem, toolStripSeparator2, espanolToolStripMenuItem });
-            toolStripDropDownButton1.Image = (Image)resources.GetObject("toolStripDropDownButton1.Image");
-            toolStripDropDownButton1.ImageTransparentColor = Color.Magenta;
-            toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            toolStripDropDownButton1.Size = new Size(29, 20);
-            toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            toolStripDropDownButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripDropDownButton.DropDownItems.AddRange(new ToolStripItem[] { francesToolStripMenuItem, toolStripSeparator1, inglesToolStripMenuItem, toolStripSeparator2, espanolToolStripMenuItem });
+            toolStripDropDownButton.Image = (Image)resources.GetObject("toolStripDropDownButton.Image");
+            toolStripDropDownButton.ImageTransparentColor = Color.Magenta;
+            toolStripDropDownButton.Name = "toolStripDropDownButton";
+            toolStripDropDownButton.Size = new Size(29, 20);
+            toolStripDropDownButton.Text = "toolStripDropDownButton1";
             // 
             // francesToolStripMenuItem
             // 
@@ -121,6 +124,8 @@ namespace OptimaBank
             // 
             // espanolToolStripMenuItem
             // 
+            espanolToolStripMenuItem.Checked = true;
+            espanolToolStripMenuItem.CheckState = CheckState.Checked;
             espanolToolStripMenuItem.Image = (Image)resources.GetObject("espanolToolStripMenuItem.Image");
             espanolToolStripMenuItem.Name = "espanolToolStripMenuItem";
             espanolToolStripMenuItem.Size = new Size(229, 22);
@@ -142,7 +147,8 @@ namespace OptimaBank
             IsMdiContainer = true;
             MainMenuStrip = menuStrip1;
             Name = "FrmMain";
-            Text = "Optima Bank - Software de Gestion Bancaria";
+            Tag = "LABEL_TITULO";
+            Text = "Optima Bank - Software de Gestión Bancaria";
             WindowState = FormWindowState.Maximized;
             Load += FrmMain_Load;
             menuStrip1.ResumeLayout(false);
@@ -160,7 +166,7 @@ namespace OptimaBank
         private ToolStripMenuItem iniciarToolStripMenuItem;
         private ToolStripMenuItem cerrarToolStripMenuItem;
         private StatusStrip statusStrip1;
-        private ToolStripDropDownButton toolStripDropDownButton1;
+        private ToolStripDropDownButton toolStripDropDownButton;
         private ToolStripMenuItem francesToolStripMenuItem;
         private ToolStripMenuItem inglesToolStripMenuItem;
         private ToolStripMenuItem espanolToolStripMenuItem;
